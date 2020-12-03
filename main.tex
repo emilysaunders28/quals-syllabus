@@ -1,0 +1,77 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage{geometry}
+\geometry{}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{extarrows}
+\usepackage{amsthm}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{xcolor}
+\usepackage{comment}
+
+\newcommand{\prob}{\mathbb{P}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\fB}{\mathfrak{B}}
+\newcommand{\A}{\mathbb{A}}
+\newcommand{\uG}{\underline{G}}
+\newcommand{\om}{\Omega}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\cB}{\mathcal{B}}
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cM}{\mathcal{M}}
+\newcommand{\vep}{\varepsilon}
+\newcommand{\parrow}{\xrightarrow{p}}
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{prop}{Proposition}
+\newtheorem{cor}{Corollary}
+\newtheorem{lemma}{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\theoremstyle{definition}
+\newtheorem{example}{Example}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+
+
+\usepackage{subfiles}
+\usepackage{blindtext}
+
+
+\usepackage{fancyhdr}
+ 
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\leftmark}
+\lhead{Emily Saunders}
+\cfoot{\thepage}
+
+\title{Qualifying Exam Notes}
+\author{Emily Saunders}
+\date{November 2020}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{General Probability}
+\subfile{Sections/General_Probability}
+
+\section{Random Graph Theory}
+\subfile{Sections/Random_Graph_Theory.tex}
+
+\section{Persistent Homology}
+\subfile{Sections/Persistent_Homology.tex}
+
+
+\end{document}

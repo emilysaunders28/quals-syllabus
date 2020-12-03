@@ -1,0 +1,113 @@
+\documentclass[main.tex]{subfiles}
+\subsection{Definitions}
+\subsubsection{Complex Constructions}
+
+\paragraph{Cech Construction}
+
+\paragraph{Vietoris-Rips Complex}
+
+\paragraph{Alpha Complex}
+
+\paragraph{Witness Complex}
+
+\paragraph{Mapper}
+
+\subsubsection{Persistent Homology}
+
+\subsection{Main Results}
+\subsubsection{Bounds for Reconstructing a Riemannian Manifold}
+
+\subsubsection{Structure Theorem for Persistent Vector Spaces}
+Fix $k$ a field, $\A$ a pure submonoid of $\R_+$. The goal of these structure theorems is to classify the isomorphism classes of $\A$-parametrized persistent $k$-vector spaces using the barcode construction. In general this is complicated, but doable for objects of $\fB Vect(k)$ that satisfy a finiteness condition, that is always satisfied for the Vietoris-Rips complexes associated with finite metric spaces (check this later).
+
+\begin{definition}
+An $\A$-graded $k$-vector space is a $k$-vector space $V$ equipped with a decomposition,
+\[V \cong \bigoplus_{\alpha \in \A} V_{\alpha}\]
+Given 2 $\A$ graded vector spaces $V_*, W_*$, we place a grading on their tensor product $V \otimes W$ by,
+\[(V \otimes W)_{\alpha} = \bigoplus_{\alpha_1 + \alpha_2 = \alpha} V_{\alpha_1} \otimes W_{\alpha_2}\]
+An $\A$ graded $k$-algebra is a $\A$-vector space $R_*$ equipped with a homomorphism $R_* \otimes R_* \to R_*$ satisfying associativity and distributivity.
+\end{definition}
+
+\begin{example}
+The monoid $k$-algebra $k[\A]_*$, for which the grading is given by,
+\[k[\A]_{\alpha} = k \cdot \alpha\]
+We will denote the element $\alpha \in k[\A]$ as $t^{\alpha}.$ This is meant to mirror the polynomial construction. Namely, we have that $t^{\alpha}t^{\alpha'} = t^{\alpha + \alpha'}$ (i.e. the grading does shift additively when you multiply), so in the case where $\A = \mathbb{N}$, we have that $k[\mathbb{N}]$ is just the graded module $k[t]$ with the usual grading $t^n$ is grade $n$.
+\end{example}
+
+\textcolor{red}{How exactly do we define graded modules over a graded ring?}
+
+First we prove a proposition that shows that persistent $k$-vector spaces can be identified with a category for which we will later be able to prove a structure theorem.
+
+\begin{prop}
+Let $\uG(\A, k)$ denote the category of $\A$-graded $k[\A]_*$-modules. Then there is an equivalence of categories,
+\[\fB \A Vect(k) \cong \uG(\A,k)\]
+\end{prop}
+\begin{proof}
+\textcolor{red}{Proof needed pg. 8 of Carlsson}
+\end{proof}
+
+\begin{definition}
+For $\alpha \in \A,$ define $F(\alpha)$ to be the free $\A$-graded $k[\A]_*$-module on a single generator in grading $\alpha$ (i.e. all elements have their grading shifted by an additive factor of $\alpha$). For any pair $\alpha, \alpha' \in \A$, define $F(\alpha, \alpha')$ to be the quotient,
+\[F(\alpha)/(t^{\alpha' - \alpha}F(\alpha))\]
+\end{definition}
+
+\begin{prop}
+Any finitely presented object of $\uG(\A,k)$ is isomorphic to a module of the form,
+\[\bigoplus_{s = 1}^m F(\alpha_s) \oplus \bigoplus_{t = 1}^n F(\alpha_t, \alpha_t')\]
+and furthermore, this decomposition is unique up to reordering of the summands.
+\end{prop}
+
+\begin{remark}
+An $R$-module $M$ is finitely presented if there exists a surjection $R^{\oplus n} \to M$. The claim is that this always holds true in the case of the Vietoris-Rips complexes for finite metric spaces.
+\end{remark}
+
+\begin{proof}
+The proof is given as a sketch by analogy with the special case of $k[t]$. \textcolor{red}{Should probably have an understanding of the details of the generalization for the exam.} For the case of a nongraded PID there is a proof using matrix equivalence outlined below.
+
+Two $m \times n$ matrices $M, N$ over a commutative ring $A$ are said to be \textit{equivalent} if there are invertible matrices $R$ and $S$ such that,
+\[M = RNS\]
+Any matrix $P$ determines a module $Q(P) = A^{\oplus m}/P(A^{\oplus n}$ such that
+\[A^{\oplus n} \xrightarrow{P} A^{\oplus m} \rightarrow Q(P) \rightarrow 0\]
+is a presentation on $Q(P)$. Moreover we can see that when $P$ and $P'$ are equivalent, the corresponding $Q(P)$ and $Q(p')$ are isomorphic by examining the following commutative diagram of exact sequences.
+\[\begin{tikzcd}
+A^{\oplus n} \arrow[r, "P"] \arrow[d, "R", "\sim"'] & A^{\oplus m} \arrow[r] & Q(P) \arrow[r] & 0\\
+A^{\oplus n} \arrow[r, "P'"] & A^{\oplus m} \arrow[u, "S", "\sim"'] \arrow[r] & Q(P') \arrow[r] & 0
+\end{tikzcd}\]
+When the ring is a PID we can show that every $m \times n$ matrix is equivalent to a matrix the form,
+\[\left[
+\begin{array}{c|c}
+D & 0 \\ \hline
+0 & 0
+\end{array}\right]\]
+with $D$ diagonal, which clearly gives the result for modules over a PID.
+
+\textcolor{red}{Are all of the $k[\A]$ modules PIDs? I feel like this should be the case as they are analogous to polynomial rings}
+
+To generalize to the graded case we need to make the following adaptations to the proof:
+
+We first consider ``$\A$-labeled matrices" as opposed to regular matrices. That is, since a homogeneous basis (i.e. a basis such that each element lies entirely in a single component of the grading decomposition) are equipped with a map to $\A$ (selecting their grade) we can also equip any matrix that describes a graded homomorphism with a labeling by elements in $\A$ (via the labeling of the basis element they correspond to?). We write $r_i, c_j \in \A$ for the labeling of the $i$th row and $j$th collumn respectively.
+
+The corresponding entries in a matrix describing a graded homomorphism written in homogeneous bases are homogeneous (since a homogeneous element would be sent to a homogeneous element, represented as such in a homogeneous basis). The grading of the element in the $ij$-spot in the matrix is $c_j - r_i$ (i.e. what the $r_i$-graded basis element in the domain needs to be shifted by to be the graded $c_j$ in the codomain) and is therefore of the form $xt^{c_j - r_i}$ for $x \in k$. Since the element $t^{c_j - r_i}$ is determined by the labels, we can uniquely represent this graded homomorphism by an $\A$-labeled matrix with entries in $k$, such that the $ij$th entry is 0 if $c_j - r_i < 0$. Such a matrix is referred to as $\A$-adapted. For square matrices representing automorphisms, we have that $r_i = c_i$.
+
+A square matrix $P_{ij}$ is said to be elementary if $P_{ii}=1$ for all $i$ and there is only 1 nonzero off-diagonal element (these are the matrices such that multiplying on the left (right) corresponds to adding a multiple of a row (column) to another row (column). In the $\A$-adapted case it corresponds to adding a row (column) with smaller (larger) labeling (since elements are 0 unless $c_j > r_i$). 
+
+To prove the result in the graded setting, we just now need to show that given any $\A$-labeled $m \times n$ matrix, it is possible to apply a sequence of adapted row/column operations such that we get a diagonal matrix, and permuting the rows/columns gives us an upper diagonal matrix which gives the result (keeping track of the corresponding labels that refer to the gradings). Uniqueness is proved in reference [22] of Carlsson's notes.
+\end{proof}
+
+These propositions now set us up to define barcodes on the outputs of persistent homology.
+
+\begin{definition}
+An $\A$-valued barcode is a finite set of elements,
+\[(\alpha, \alpha') \in \A \times (\A \cup \{+\infty\}\]
+satisfying the condition that $\alpha < \alpha'$. An $\A$ valued barcode is said to be finite if all right hand endpoints are $< \infty$. If $\A = \R_+$, we refer to it as simply a barcode, without specifying the monoid.
+\end{definition}
+\begin{remark}
+Via the equivalences defined in the above propositions, we have shown that isomorphism classes of elements in $\fB Vect(k)$ correspond to isomorphism classes of $k[\A]_*$-graded modules, which correspond to a decomposition uniquely determined by a barcode labeling where we identify the module,
+\[\bigoplus_{s = 1}^m F(\alpha_s) \oplus \bigoplus_{t = 1}^n F(\alpha_t, \alpha_t')\]
+with the barcode, $\{(\alpha_s, +\infty)| 1 \leq s \leq m\} \cup \{(\alpha_t, \alpha_t')|1 \leq t \leq n\}$
+\end{remark}
+
+
+
+
+\subsubsection{Stability Theorems}
