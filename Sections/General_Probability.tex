@@ -7,8 +7,8 @@ Resources for this section are my own lecture notes from Professor Corwin's Fall
 Let $\om$ be a set. We say $\cF \subset 2^{\om}$ is a $\sigma$-algebra if,
 \begin{enumerate}
     \item $\om \in \cF$
-    \item If $A \in \cF$, then $A^c \in \cF$ as well
-    \item For every countable collection $\{A_i\} \subset \cF$, $\bigcup A_i \subset \cF$ as well
+    \item If $A \in \cF$, then $A^c \in \cF$
+    \item For every countable collection $\{A_i\} \subset \cF$, $\bigcup A_i \subset \cF$
 \end{enumerate}
 Note that given 2 we could equivalently require that 1 read $\phi \in \cF$ and that 3 read that $\cF$ is closed to countable intersections.
 \end{definition}
@@ -261,6 +261,10 @@ Now we can prove the first of the Borel-Cantelli lemmas:
 For $\varphi: \R \to \R$ convex, 
 \[\varphi(\int f d \mu) \leq \int \varphi(f) d \mu\]
 \end{prop}
+\begin{proof}
+    Let $L(x) = ax + b$ be a linear function such that $L(\int f d \mu) = \vp(\int f d \mu)$ and $L(x) \leq \vp(x)$ for all $x$ (such a function exists if $\vp$ is convex). Then we have,
+    \[\int \vp(f) d \mu \geq \int af + b d\mu  = a \int f d\mu + b = L(\int f d\mu) = \vp(\int f d\mu)\]
+\end{proof}
 
 
 \begin{prop}[Holder's Inequality]
@@ -271,10 +275,31 @@ where $||f||_p = (\int |f|^pd\mu)^{1/p}$
 \begin{remark}
 When $p = q = 2$, this is Cauchy-Schwartz inquality.
 \end{remark}
+\begin{proof}
+    If $||f||_p$ or $||g||_p$ $= 0$, then $fg = 0$ almost everywhere. Therefore it is sufficient to prove the result when $||f||_p, ||g||_p> 0$. By deviding both sides by $||f||_p||g||_p$, we can assume that $||f||_p||g||_p = 1$. Fix $y \geq 0$ and for all $x \geq 0$, let,
+    \[\vp(x) = x^p/p + y^q/q - xy\]
+    Then we have that,
+    \[\vp'(x) = x^{p-1} - y \quad \quad \vp''(x) = (p-1)x^{p-2}\]
+    Therefore $x$ has a minimum at $x_0 = y^{1/(p-1)}$. Then we have that $q = p/(p-1)$, so $x_0^p = y^q$. Thus we have,
+    \[\vp(x_0) = y^q(1/p + 1/q) - y^{1/(p-1)}y = 0\]
+    Since $x_0$ was the minimum it follows that $xy \leq x^p/p + y^q/q$, so if we let $x = |f|, y = |g|$, we get,
+    \[\int |fg|d\mu \leq \frac{1}{p} + \frac{1}{q} = 1 = ||f||_p||g||_p\]
+\end{proof}
 
-\begin{prop}[Markov Inequality]
-    \textcolor{red}{Need statement and proofs for all of the above ALSO CHEBYSHEV!}
+\begin{prop}[Markov's Inequality]
+    Suppose $\vp: \R \to \R$ has $\vp \geq 0$. Let $A \in \cB$ and let $i_A = \inf\{\vp(a)|a\in A\}$. Then,
+    \[i_A \prob(X \in A) \leq \E[\vp(X)1_{X \in A}] \leq \E[\vp(X)]\]
 \end{prop}
+\begin{proof}
+    By definition of $i_A$, we have,
+    \[i_A 1_{X \in A} \leq \vp(X)1_{X \in A} \leq \vp(X)\]
+    Since $\E[1_{X \in A}] = \prob(X \in A)$, taking expectation gives  us,
+    \[i_A \prob(X \in A) \leq \E[\vp(X)1_{X \in A}] \leq \E[\vp(X)]\]
+\end{proof}
+\begin{example}[Chebyshev's Inequality]
+    When $\vp(x) = x^2$, we have that,
+    \[\prob(|X-\E[X]| > \alpha) \leq \frac{Var(X)}{\alpha^2}\]
+\end{example}
 
 
 \begin{definition}[Product Measure]
@@ -284,13 +309,7 @@ Let $(X, \cA, \mu_1), (Y, \cB, \mu_2)$ be $\sigma$-finite measure spaces. Let $\
 Visually, we can think of this measure in $\R^2$ as being defined on rectangles by length $\times$ width and defined on other sets as the limit of approximating the set by a covering of smaller and smaller rectangles and taking their measures.
 \end{remark}
 
-\begin{theorem}[Fubini's Theorem]
-If $f \geq 0$ or $\int|f| d \mu < \infty$, then,
-\[\int_{X \times Y} f d\mu = \int_X \int_Y f(x,y) \mu_2(dy) \mu_1(dx)\]
-\end{theorem}
-\begin{proof}
-\textcolor{red}{Proof Needed (in Durrett, not in my notes)}
-\end{proof}
+
 
 
 
@@ -300,8 +319,8 @@ If $f \geq 0$ or $\int|f| d \mu < \infty$, then,
 \subsubsection{Convergence Theorems for Integrals}
 
 \begin{definition}[Convergence in Measure]
-A sequence of functions $f_n: \om \to \R$ converges in measure to $f: \om \to \R$ if for all $\varepsilon > 0$,
-\[\lim_{n \to \infty} \mu(|f_n - f| > \vep) = 0\]
+    A sequence of functions $f_n: \om \to \R$ converges in measure to $f: \om \to \R$ if for all $\varepsilon > 0$,
+    \[\lim_{n \to \infty} \mu(|f_n - f| > \vep) = 0\]
 \end{definition}
 
 \begin{theorem}[Bounded Convergence Theorem]
@@ -309,29 +328,72 @@ A sequence of functions $f_n: \om \to \R$ converges in measure to $f: \om \to \R
     \[\lim_{n \to \infty} \int f_n d\mu = \int f d\mu\]
 \end{theorem}
 \begin{proof}
-    \textcolor{red}{Proof needed}
+    Let $\vep > 0$ and $G_n = \{x : |f_n(x) - f(x)| < \vep\}$. Define $B_n = E - G_n$. Then we have,
+    \[|\int f d\mu - \int f_n d\mu| = |\int (f_n - f) d\mu| \leq \int |f - f_n| d \mu\] \[= \int_{G_n} |f - f_n| d\mu + \int_{B_n} |f - f_n| d\mu \leq \vep \mu(E) + 2M\mu(B_n)\]
+    Since $f_n \to f$ in measure, $\mu(B_n) \to 0$. Therefore since $\vep$ was arbitrary and $\mu(E) < \infty$, $\int f_n d\mu \to \int f d \mu$.
 \end{proof}
+The following is an example to illustrate the necessity of the bounded condition.
+\begin{example}
+    Consider the function $f_n: \R \to \R$ that is $1/n$ on $[0,n]$ and 0 otherwise. Then $\int f_n(x) dx = 1$ for all $n$, but $\lim_{n \to \infty} f_n = 0$, therefore $\lim_{n \to \infty} \int f_n(x) dx \neq \int \lim_{n \to \infty} f_n (x)dx$
+\end{example}
+\begin{remark}
+    If $\mu$ is finite (for instance, a probability measure), then we have that $\mu(\om) < \infty$, therefore all that we need to check to apply the theorem is that the sequence $\{f_n\}_n$ is uniformly bounded.
+\end{remark}
 
 \begin{theorem}[Fatou's Inequality]
     If $f_n \geq 0$, then 
     \[\liminf_{n \to \infty} (\int f_n d\mu) \geq \int (\liminf_{n \to \infty} f_n)d\mu \]
 \end{theorem}
 \begin{proof}
-    \textcolor{red}{Proof needed}
+    Let $g_n(x) = \inf_{m \geq n} f_m(x).$ Then we have, $f_n(x) \geq g_n(x)$ and $g_n \xrightarrow{n \to \infty} \liminf_{n \to \infty} f_n(x)$. Since we have that $\int f_n d\mu \geq \int g_n d \mu$, it is sufficient to show,
+    \[\liminf_{n \to \infty} \int g_n d \mu \geq \int \lim_{n \to \infty} g_n d \mu\]
+    Let $E_1 \subset E_2 \subset ...$ be sets of finite measure such that $\bigcup_{n = 1}^{\infty} E_n = \om$. Since $g_n \geq 0$, $g_n \geq g_{n + 1}$ and for fixed $m$ we have that $ \min(g_n, m) 1_{E_m} \to \min(\liminf_{n \to \infty}f_n, m) 1_{E_m}$, the bounded convergence theorem tells us that,
+    \[\liminf_{n \to \infty} \int g_n d \mu \geq \int g_n d \mu \geq \int_{E_m} \min(g_n,m) d \mu \to \int_{E_m} \min(\liminf_{n \to \infty} f_n , m) d \mu\]
+    Taking the sup over all $m$ concludes the proof.
 \end{proof}
 
 \begin{theorem}[Monotone Convergence Theorem]
     If $f_n \geq 0$ and $f_n \nearrow f$ monotonically, then $\int f_n d\mu \nearrow \int fd\mu$
 \end{theorem}
 \begin{proof}
-    \textcolor{red}{Proof needed}
+    Fatou's inequality tells us that $\liminf_{n \to \infty} \int f_n d \mu \geq \int fd\mu$. On the other hand, $f_n \leq f$ implies that $\limsup_{n \to \infty} \int f_n d\mu \leq \int fd\mu$.
 \end{proof}
 
 \begin{theorem}[Dominated Convergence Theorem]
     If $f_n \xrightarrow{a.e.} f$, and $|f_n| \leq g$ for $g$ integrable, then $\lim_{n \to \infty} f_n d \mu \to \int f d\mu$
 \end{theorem}
 \begin{proof}
-    \textcolor{red}{Proof needed}
+    We have that $f_n + g \geq 0$, so Fatou's inequality tells us that,
+    \[\liminf_{n \to \infty} \int f_n + g d\mu \geq \int f+g d\mu\]
+    Subtracting $\int g d\mu$ from both sides tells us that,
+    \[\liminf_{n \to \infty} \int f_n d \mu \geq \int f d\mu\]
+    We can apply the same logic to $-f_n$ to obtain,
+    \[\limsup_{n \to \infty} \int f_n d\mu \leq \int f d\mu\]
+    which tells us that $lim_{n \to \infty} \int f_n d\mu \to \int f d\mu$.
+\end{proof}
+
+\begin{theorem}[Fubini's Theorem]
+    Let $(X, \cA, \mu_1), (Y, \cB, \mu_2)$ be measure spaces, and let $(X \times Y, \sigma(\cA \times \cB), \mu_1 \times \mu_2)$ be the product space as defined in definiton 13. If $f: X \times Y \to \R$ is a measureable function such that $f \geq 0$ or $\int|f| d \mu < \infty$, then,
+    \[\int_{X \times Y} f d\mu = \int_X \int_Y f(x,y) \mu_2(dy) \mu_1(dx)\]
+    \end{theorem}
+\begin{proof}
+    We will prove the first equality, which implies the second by symmetry. To prove that the integral on the left makes sense, we need to check that (i) for a fixed $x$, the function $f(x,-)$ is $\cB$-measureable, and (ii) for a fixed $y$, the function $x \mapsto \int_Y f(x,y) \mu_2(dx)$ is $\cA$-measurable.
+
+    We begin with the case of $f$ an indicator function $1_E$. Let $E_x = \{y \in Y: (x,y) \in E\}$ be the cross-section of $E$ at $x$. 
+    \begin{lemma}
+        If $E \in \sigma(\cA \times \cB)$, then $E_x \in \cB$.
+    \end{lemma}
+    \begin{proof}
+        We can easily verify that $(E^c)_x = E_x^c$ and $(\bigcup_{i = 0}^{\infty} E_i)_x = \bigcup_{i = 0}^{\infty} E_{i,x}$, therefore if $\mathcal{E}$ is the collection of sets in $\sigma(\cA \times \cB)$ then $\mathcal{E}$ is a $\sigma$-algebra. Observing that $\cA \times \cB \subset \mathcal{E}$ concludes the proof.
+    \end{proof}
+    \begin{lemma}
+        If $E \in \sigma(\cA \times \cB)$, then $g(x) = \mu_2(E_x)$ is $\cA$-measurable and,
+        \[\int_X gd\mu_1 = \mu_1 \times \mu_2(E)\]
+    \end{lemma}
+    \begin{proof}
+        \textcolor{red}{Requires $\pi-\lambda$ stuff, so come back to this (maybe make an appendix?)}
+    \end{proof}
+
 \end{proof}
 
 \subsubsection{Convergence of Random Variables}
@@ -445,7 +507,7 @@ $X_n \Rightarrow X$ if and only if for every bounded continuous function $g$, we
 Let $Y_n$ have the same distribution as $X_n$ and be such that $Y_n$ converges almost surely to $Y \overset{d}{\sim} X$. Since $g$ is continuous we have that $g(Y_n) \to g(Y)$ almost surely and the bounded convergence theorem implies that,
 \[\E[g(x_n)] = \E[g(Y_n)] \to \E[g(Y)] = \E(g(X)]\]
 To prove the converse, let,
-\[g_{x \vep}(y) = \begin{cases}
+\[g_{x ,\vep}(y) = \begin{cases}
 1 & y \leq x\\
 0 & y \geq x + \vep\\
 \text{linear interpolation} & x \leq y \leq x + \vep
@@ -456,6 +518,48 @@ Letting $\vep \to 0$, we get $\limsup_{n \to \infty} \prob(X_n \leq x) \leq \pro
 \[\liminf_{n \to \infty} \prob(X_n \leq x) \geq \liminf_{n \to \infty} \E[g_{x - \vep, \vep}(X_n)] = \E[g_{x - \vep. \vep}(X)] \geq \prob(X \leq x - \vep)\]
 So again we take $\vep \to 0$ and get that $\liminf_{n \to \infty} \prob(X_n \leq x) \geq \prob(X \leq x)$ if $x$ is a continuity point. 
 \end{proof}
+
+
+\begin{theorem}[Helly's Selection Theorem]
+    For every sequence $F_n$ of distribution functions, there is a subsequence $F_{n_k}$ and a right continuous nondecreasing function $F$ so that $\lim_{k \to \infty}F_{n_k}(y) = F(y)$ for all continuity points $y$ of $F$. 
+\end{theorem}
+\begin{proof}
+    We begin by making a diagonal argument on the rationals. Letting $q_1, q_2, ...$ be an enumeration of the rationals, we notice that for every $i$, $\{F_n(q_i)\}_n$ is a sequence bounded by $[0,1]$. Therefore we can inductively construct a subsequence $n_{k(i)}$ such that $n_{k(i)}$ is a subsequence of $n_{k(i-1)}$ and $\{F_{n_k(i)}(q_i)\}_{k(i)}$ converges. Then we diagonally construct a subsequence $n_i = n_{i(i)}$ so that for all $q \in \mathbb{Q}$, $\{F_{n_i}(q)\}_i$ converges to some $b_q$. Furthermore, we have that for $p,q \in \mathbb{Q}, p < q$, $b_p < b_q$. We now define,
+    \[F(x) = \inf\{b_q| q \in \mathbb{Q}, q > x\}\]
+    It is easily verifiable by the monotone property mentioned above that $F(q) = b_q$ and $F$ is right continuous and monotone. Thus all that remains to show is that $F_{n_i}(y) \to F(y)$ for $y$ a continuity point of $F$. By continuity, for every $\vep > 0$ we can select rationals $p, q$ such that $p < y < q$ and,
+    \[F(y) - \vep < F(p) \leq F(y) \leq F(q) < F(y) + \vep\]
+    Since our subsequence converges on the rationals to $F$, and $F_{n_i}$ is monotone for all $i$, we see that for sufficiently large $i$,
+    \[F(y) - \vep < F_{n_i}(p) \leq F_{n_i}(y) \leq F_{n_i}(q) < F(y) + \vep\]
+    which concludes the proof.
+\end{proof}
+\begin{remark}
+    Note that this is NOT equivalent to the corresponding measures of the subsequence converging weakly to a measure $\mu$ as $F$ is not necessarily a distribution function (i.e. it may not have the appropriate limits at $\pm \infty$). For a simple example, let $F_n$ be such that $F(x) = 0$ for $x < n$ and $F_n(x) = 1$ for $x \geq n$. Then the resulting pointwise limit $F$ is 0, which is clearly not a probability measure as $
+    lim_{x \to + \infty} F(x) \neq 1$. This example illustrates that generally in the limit mass is able to escape to $\pm \infty$ (we could just as easily compute a sequence where mass escapes to $-\infty$ by letting $G_n(x) = F_{-n}(x)$). However, the following definition and theorem gives necessary and sufficient criteria to keep this from happening. 
+\end{remark}
+
+\begin{definition}[Tightness]
+    A sequence of probaility measures $\mu_n$ on $\R$ is tight if for every $\vep$, there exists a $M_{\vep}$ such that,
+    \[\limsup_{n \to \infty} 1 - \mu_n([-M_{\vep}, M_{\vep}]) \leq \vep\]
+    Equivalently, a sequence of distribution functions $F_n$ is tight if for every $\vep$ there exists a $M_{\vep}$ such that,
+    \[\limsup_{n \to \infty} 1 - F(M_{\vep}) + F(-M_{\vep}) \leq \vep\]
+\end{definition}
+
+\begin{theorem}
+    A squence of distribution functions $F_n$ is tight if and only if every subsequential limit is the distribution function of a probability measure.
+\end{theorem}
+\begin{proof}
+    Suppose the sequence $F_n$ is tight and $F_{n_k}(y) \to F(y)$ for all continuity points of $F$. Fix some $\vep>0$ and let $r < -M_{\vep}, s > M_{\vep}$. Then we have that,
+    \[1 - F(s) + F(r) = \lim_{k \to \infty} 1 - F_{n_k}(s) + F_{n_k}(r) \leq \limsup_{n \to \infty} 1 - F_n(M_{\vep}) + F_n(-M_{\vep}) \leq \vep\]
+    This implies that $\limsup_{x \to \infty} 1 - F(x) + F(-x) \leq \vep$. Since $\vep$ was arbitrary and $0 \leq F(-x) \leq F(x) \leq 1$, this implies that $F$ is a probability distribution function.
+
+    To prove the converse, suppose that $F_n$ is not tight. Then there is an $\vep > 0$ and a subsequence such that,
+    \[1-F_{n_k}(k) + F_{n_k}(-k) \geq \vep\]
+    for all $k$. By choosing a further subsequence, we may assume that there exists a monotone, right continuous $F$ such that $F_{n_k}(y) \to F$ for all continuity points of $F$. Let $r < 0 < s$ be continuity points of $F$. Then we have, 
+    \[1 - F(s) + F(r) = \lim_{k \to \infty} 1 - F_{n_k}(s) + F){n_k}(r) \geq \liminf_{k \to \infty} 1 - F_{n_k}(k) + F_{n_k}(-k) \geq \vep\]
+    Therefore $F$ cannot be a probability distribution function. 
+\end{proof}
+
+
 
 \subsection{$L^p$ Space}
 
@@ -793,21 +897,584 @@ Let $X_1, X_2, ... $ be i.i.d. random variables distributed according to some co
 
 
 \paragraph{Triangular Arrays}
+\textcolor{red}{Page 51 in Durrett}
 
 
 \subsection{Central Limit Theorem}
 \subsubsection{Characteristic Functions}
+\begin{definition}[Characteristic Function]
+    For a random variable $X$ with distribution $\mu$ on $\R$ and $t \in \R$, the characteristic function $\varphi_X(t)$ is defined to be,
+    \[\varphi_X(t) = \E[e^{itX}] = \int_{\R} e^{itX} d\mu\]
+\end{definition}
 
+The following are easily verifyable properties of characteristic functions:
 
+\begin{enumerate}
+    \item $\vp_X(0) = 1$
+    \item $\vp_X(-t) = \overline{\vp_X(t)}$
+    \item $|\vp_X(t)| = |\E[e^{itX}]| \leq \E[|e^{itX}|] = \E[1] = 1$
+    \item $\vp_X$ is uniformly continuous on $(-\infty, \infty)$: $$|\vp_X(t) - \vp_X(t + h)| = |\E[e^{itX}(1-e^{ihX})]| \leq \E[|1-e^{ihX}|]$$
+    \item $\vp_{aX+b}(t) = \E[e^{it(aX+b)}] = e^{itb}\vp_X(at)$
+    \item If $X \in \mathbb{Z}$ almost surely, $\vp_X(t + 2\pi) \vp_X(t):$ $$\vp_X(t+2\pi) = \E[e^{i(t+2\pi)X}] = \E[e^{i2\pi X}e^{itX}] = \vp_X(t)$$
+\end{enumerate}
 
+\begin{prop}
+    If $X_1$ and $X_2$ are independent, then $\vp_{X_1+X_2}(t) = \vp_{X_1}(t)\vp_{X_2}(t)$
+\end{prop}
+\begin{proof}
+    We can check this directly,
+    \[\vp_{X_1 +X_2}(t) = \E[e^{it(X_1+X_2)}] = \E[e^{itX_1}e^{itX_2}] = \E[e^{itX_1}] \E[e^{itX_2}] = \vp_{X_1}(t) \vp_{X_2}(t) \]
+\end{proof}
 
+\begin{example}[Bernoulli($\frac{1}{2}$)]
+    If $X \sim Bern(\frac{1}{2})$, then, $$\vp_{X}(t) = \frac{1}{2}e^{it} + \frac{1}{2}e^{-it} = \cos(t)$$
+    For general $p$, $\vp_X(t) = pe^{it} + (1-p)e^{-it}$.
+\end{example}
 
+\begin{example}[Binomial($n, \frac{1}{2}$)]
+    By proposition 13 and example 3, we have that for $X \sim Bin(n, \frac{1}{2})$, 
+    \[\vp_X(t) = \cos^n(t)\]
+\end{example}
+
+\begin{example}[Poisson($\lambda$)]
+    If $N \sim Po(\lambda)$, then,
+    \[\vp_N(t) = \sum_{k = 0}^{\infty} e^{itk}e^{-\lambda} \frac{\lambda^k}{k!} = e^{-\lambda} \sum_{k = 0}^{\infty}\frac{(e^{it} \lambda)^k}{k!} = e^{\lambda(e^{it}-1)}\]
+\end{example}
+
+\begin{example}[Normal($0, \sigma^2$)]
+    For $Z \sim \cN(0, \sigma^2)$,
+    \[\vp_Z(t) = \frac{1}{\sigma \sqrt{2\pi}}\int_{-\infty}^{\infty} e^{itx}e^{-x^2/2\sigma^2} dx = e^{-\sigma^2t/2} \]
+\end{example}
+
+\begin{example}[Uniform]
+    For $U \sim Unif[a,b]$,
+    \[\vp_U(t) \frac{1}{it(b-a)}(e^{itb} - e^{ita})\]
+    If $a = c$ and $b = -c$, then we have that,
+    \[\vp_U(t) = \frac{\sin(ct)}{ct}\]
+\end{example}
+
+\begin{example}[Triangle Density]
+    For $X$ a random variable with density $f(x) = 1-|x|$ on $[-1,1]$ (example: $U_1 + U_2$ for $U_1,U_2$ independent $\sim Unif[-1/2,1/2]$),
+    \[\vp_X(t) = \vp_{U_1}(t)vp_{U_2}(t) = (\frac{\sin^2(t/2)}{t/2})^2 = \frac{2(1-\cos(t))}{t^2}\]
+\end{example}
+
+\begin{example}[Exponential]
+    For $X \sim exp(\lambda)$,
+    \[\vp_X(t) = \lambda \int_0^{\infty} e^{itx}e^{-\lambda x}dx = \frac{\lambda}{(it- \lambda)}\]
+\end{example}
+
+Now the question becomes, how do we reverse this process? That is, how can we recover a distribution from a characteristic function?
+
+\begin{theorem}[Inversion Formula for Characteristic Functions]
+    Let $\vp(t) = \int_{\R} e^{itx}\mu(dx)$ for $\mu$ a probability distribution. Then for $a < b$, 
+    \[\mu((a,b)) + \frac{1}{2}\mu(\{a,b\}) = \lim_{T \to \infty} \frac{1}{2\pi} \int_{-T}^T \frac{e^{-ita} - e^{-itb}}{it}\vp(t)dt\]
+\end{theorem}
+\begin{proof}
+    Define,
+    \[I_t = \int_{-T}^T \frac{e^{-ita} - e^{-itb}}{it}\vp(t)dt = \int_{-T}^{T} \int_{\R} \frac{e^{-ita} - e^{-itb}}{it}e^{itx} \mu(dx) dt\]
+    To show that this integral exists, we observe that,
+    \[\frac{e^{-ita} - e^{-itb}}{it} = \int_a^b e^{-ity}dy\]
+    Therefore, $|\frac{e^{-ita} - e^{-itb}}{it}| \leq b - a$.
+
+    Since $\mu$ is a probability measure and $[-T,T]$ is a finite interval we are allowed to apply Fubini's theorem to obtain,
+    \[I_T = \int_{\R} \int_{-T}^T \frac{e^{-ita} - e^{-itb}}{it} e^{itx} dt \mu(dx)\]
+    \[= \int_{\R}(\int_{-T}^T \frac{\sin(t(x-a))}{t}dt - \int_{-T}^T\frac{\sin(t(x-b))}{t}dt)\]
+    Define,
+    \[R(\theta,T) = \int_{-T}^T \frac{\sin(t\theta)}{t} dt \quad \quad \quad S(T) = \int_0^T \frac{\sin(x)}{x} dx\]
+    Then we have that
+    \[I_T = \int_{\R}(R(x - a, T) - R(x-b, T))\mu(dx)\]
+    Apply a change of variables letting $t = x/\theta$ to get,
+    \[R(\theta,T) = 2\int_0^{T\theta} \frac{\sin(x)}{x} dx = 2S(T\theta)\]
+    Since $\sin$ is an odd function, we have that $R(\theta,T) = sgn(\theta)R(|\theta|,T)$, so we get that $R(\theta,T) = 2sgn(\theta)S(T|\theta|)$
+    As $T \to \infty$, $S(T) \to \pi/2$ (See exercise 1.7.5 in Durrett). This implies that $\lim_{T \to \infty} R(\theta,T) = \pi sgn(\theta)$, therefore we get that,
+    \[\lim_{T \to \infty} R(x - a,T) - R(x-b,T) = \begin{cases}
+        2\pi & a < x < b\\
+        \pi & x = a \text{ or } x = b\\
+        0 & \text{else}
+    \end{cases}\]
+    We then use dominated  convergence to bring the limit inside of the integral to get,
+    \[\lim_{T \to \infty} \frac{1}{2\pi} \int_{\R} (R(x - a, T) - R(x - b, T))\mu(dx) = \frac{1}{2\pi}(\int_a^b 2\pi \mu(dx) + \pi(\mu(a) + \mu(b))\]
+    \[= \mu((a,b)) + \frac{1}{2}\mu(\{a,b\})\]
+\end{proof}
+
+The following theorem about inverting point masses won't be proven here but follows a similar structure to the inversion theorem proof above:
+
+\begin{theorem}
+    If $\vp(t) = \int_{\R} e^{itx}\mu(dx)$, then 
+    \[\mu(\{a\}) = \lim_{T \to \infty} \frac{1}{2T} \int_{-T}^T e^{-ita} \varphi(t)dt\]
+\end{theorem}
+
+\begin{cor}
+    If $\vp_X$ is real, then $X$ and $-X$ have the same  distribution.
+\end{cor}
+
+\begin{cor}
+    If $X_1 \sim \cN(0, \sigma^2_1), X_2 \sim \cN(0, \sigma^2_2)$ are independent, then $X_1 + X_2 \sim \cN(0, \sigma_1^2 + \sigma_2^2)$
+\end{cor}
+
+\begin{theorem}
+    If $\int|\varphi(t)|dt < \infty$, then $\mu$ has bounded continuous density,
+    \[f(y) = \frac{1}{2\pi} \int e^{ity} \vp(t)dt\]
+\end{theorem}
+\begin{proof}
+    By the bound on the integrand mentioned in the inversion theorem and the fact that our integral converges absolutely, we have that,
+    \[\mu((a,b)) + \frac{1}{2}\mu(\{a,b\}) = \int_{-\infty}^{\infty} \frac{e^{-ita} - e^{-itb}}{it} \vp(t)dt \leq \frac{(b-a)}{2\pi} \int_{-\infty}^{\infty} |\vp(t)|dt \xrightarrow{a \to b} 0\]
+    which implies that $\mu$ has no point masses. 
+
+    Next, we have that,
+    \[\mu((x,x+h)) = \frac{1}{2\pi} \int \frac{e^{-itx} - e^{-it(x+h)}}{it}\vp(t)dt = \frac{1}{2\pi} \int (\int_x^{x + h} e^{-ity} dy) \vp(t) dt\]
+    \[ = \int_x^{x + h} (\frac{1}{2\pi} \int e^{-ity}\vp(t)dt) dy\]
+    Therefore $\mu$ has density function,
+    \[f(y) = \frac{1}{2\pi} \int e^{-ity}\vp(t)dt\]
+\end{proof}
+
+\begin{prop}
+    Let $X$ be a random variable with distribution $\mu$. If $\int|x|^n \mu(dx) < \infty$, then,
+    \begin{enumerate}
+        \item  $\vp_X^{(n)}(0) = i^n \E[X^n]$
+        \item $\vp_X(t) = \sum_{m = 0}^n \frac{1}{m!} \E[(itX)^m] + g_n(t)$ for $g_n(t) = o(t^n)$.
+        \item $|g_n(t)| \leq \E[\min(|tX|^{n+1}, 2|tX|^n)]$
+    \end{enumerate}
+\end{prop}
+\begin{proof}
+    1 follows from the fact that $\vp_X^{(n)}(t) = \int (ix)^n e^{itx} \mu(dx)$. 2 follows from taylor expanding $\vp_X$. 
+
+    \textcolor{red}{why is 3 true?}
+\end{proof}
+
+\begin{theorem}[Levy-Cramer Continuity Theorem]
+    Let $\mu_n, n \geq 1$ be probability measures with characteristic functions $\vp_n$. Then (i) if $\mu_n \Rightarrow \mu$, $\vp(t) \to \vp(t)$ for $\vp$ the characteristic function of $\mu$. (ii) If $\vp_n(t)$ converges pointwise to a limit $\vp(t)$ that is continuous at $0$, then the associated sequence of probability measures is tight and converges weakly to the measure $\mu$ with characteristic function $\vp$.
+\end{theorem}
+\begin{proof}
+    We will first prove (i). Recall from theorem 10 that $\mu_n \Rightarrow \mu$ if and only if for every bounded continuous function $g$, $
+    int g(x)\mu_n(dx) \to \int g(x) \mu(dx)$. We have that,
+    \[\vp_n(t) = \int e^{itx} \mu_n(dx) = \int \cos(tx) \mu_n(dx) + i \int \sin (tx) \mu_n(dx)\] \[\xrightarrow{n \to \infty} \int \cos(tx) \mu(dx) + i\int \sin(tx)\mu(dx) = \vp(t)\]
+    Where the limit follows by applying theorem 10 with $g(x) = \cos(tx)$ and $g(x) = \sin(tx)$.
+
+    Next we prove (ii). First, we claim that the convergence of characteristic functions implies that $\mu_n$ is tight (see page 115 of Durrett for details on the proof).
+
+    Next, we apply Helly's selection theorem and theorem 12 to obtain a subsequence $\mu_{n_k}$ such that $\mu_{n_k} \Rightarrow \mu$ for $\mu$ a probability measure on $\R$. It is clear from (i) that this then implies $\mu$ has distribution function $\vp$. This observation and tightness then implies that every sequence has a further subsequence that converges to $\mu$. We now use theorem 10 to prove that this implies $\mu_n \Rightarrow \mu$. Suppose $f$ is continuous and bounded. Then we know that every subsequence of $\{\int f(x) \mu_n(dx)\}_n$ has a further subsequence that converges to $\int f(x) \mu(dx)$, therefore $\int f(x) \mu_n(dx) \to \int f(x) \mu(dx)$, which concludes the proof.
+\end{proof}
+
+\textcolor{red}{Higher dimensional characteristic functions and inversion formula/sufficient conditions to check weak convergence}
+
+\subsubsection{The Central Limit Theorem and Variations}
+
+\begin{theorem}[The Central Limit Theorem]
+    Let $X_1, X_2, ...$ be i.i.d. random variables with $\E[X_i] = \mu$ and $Var(X_i) = \sigma^2$. Let $Z \sim \cN(0,1)$, then
+    \[\frac{S_n - n\mu}{\sigma \sqrt{n}} \Rightarrow Z\]
+\end{theorem}
+\begin{proof}
+    By centering, we can assume that $\mu = 0$. We will prove this theorem by proving that the characteristic functions $\vp_{\frac{S_n}{\sigma \sqrt{n}}}(t)$ converge pointwise to the characteristic function of $Z$, $\vp_{Z}(t) = e^{-t/2}$.
+    \begin{align*}
+        \vp_{\frac{S_n}{\sigma \sqrt{n}}}(t) & = \E[e^{it\frac{S_n}{\sigma \sqrt{n}}}]\\
+        & = (\E[e^{it\frac{X_i}{\sigma \sqrt{n}}}])^n & \text{By } \{X_k\}_k \text{ i.i.d}\\
+        & = (1 - \frac{1}{2}(\frac{t}{\sigma\sqrt{n}})^2 \sigma^2 + o(\frac{t^2}{\sigma^2n}))^n & \text{By Proposition 14}\\
+        & = (1 - \frac{t}{2n} + o(\frac{1}{n}))^n
+    \end{align*}
+    We then apply the following lemma to the above formula (which we won't prove here):
+    \begin{lemma}
+        If $c_j \to 0$, $a_j \to \infty$, and $c_ja_j \to \lambda$, then $(1+c_j)^{a_j} \to e^{\lambda}$
+    \end{lemma}
+    Taking $a_j = j$, and $c_j = -\frac{t}{2j} + o(\frac{1}{j})$, we have that $\lambda = -\frac{t}{2}$, so,
+    \[\lim_{n \to \infty} \vp_{\frac{S_n}{\sigma \sqrt{n}}}(t) = \lim_{n \to \infty} (1 - \frac{t}{2n} + o(\frac{1}{n}))^n = e^{-\frac{t}{2}} = \vp_Z(t)\]
+\end{proof}
+
+\textcolor{red}{COME BACK TO THIS SECTION AND SAY MORE (pg 58 in notes)}
+
+\textcolor{red}{Weak convergence in general metric spaces and the Protmanteau theorem}
+
+\begin{theorem}[Cramér-Wold Device]
+    Let $\{X_n\}_n$ be a sequence of random vectors in $\R^d$ such that for all $\theta \in \R^d$, $X_n \cdot \theta \Rightarrow X \cdot \theta$, then $X_n \Rightarrow X$
+\end{theorem}
+\begin{proof}
+    Let $\vp_n$ and $\vp$ be the characteristic functions of $X_n$ and $X$ respectively. Then for all $\theta \in \R^d$ we have,
+    \[\vp_n(\theta) = \vp_{\theta \cdot X_n}(1) \xrightarrow{n \to \infty} \vp_{\theta \cdot X}(1) = \vp(\theta)\]
+\end{proof}
+
+\begin{theorem}[Central Limit Theorem in $\R^d$]
+    Let $X_1,X_2,...$ be i.i.d. random vectors in $\R^d$ with $\E[X_i] = \mu \in \R^d$ and covariance matrix $\Gamma_{i,j} = \E[(X_k^i - \mu_i)(X_k^j - \mu_j)]$. Let $X$ be a multivariate Gaussian random vector in $\R^d$ with $\E[X] = 0$ and covariance matrix $\Gamma$, and define $S_n = X_1 + ... + X_n$. Then,
+    \[\frac{S_n-\mu n}{\sqrt{n}} \Rightarrow X\]
+\end{theorem}
+
+We now will state a theorem that gives bounds on the rate of convergence of these sequences of random variables to the normal distribution.
+
+\begin{theorem}
+    Let $X_1, X_2, ...$ be i.i.d. random variables in $\R$ with $\E[X_i] = 0, \E[X_i^2] = \sigma^2$, and let $F_n$ be the distribution function for $\frac{S_n}{\sigma \sqrt{n}}$. Denote $\Phi(x) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^x e^{-y^2/2} dy$ the distribution function of $\cN(0,1)$, then,
+    \[\sup_x|F_n(x) - \Phi(x)| \leq \frac{3 \E[|X_i|^3]}{\sigma^3\sqrt{n}}\]
+\end{theorem}
+\textcolor{red}{Maybe prove this but probably not}
+
+\textcolor{red}{Local Limit CLT}
+
+The following theorem gives us nice control on the magnitude of fluctuations of a random walk.
+
+\begin{theorem}[Law of the Iterated Logarithm]
+    Let $X_1, X_2, ...$ be i.i.d. random variables with $\E[X_i] = 0$ and $\E[X_i^2] = 1$. Then,
+    \[\limsup_{n \to \infty}|\frac{S_n}{\sqrt{n\log(n)}}| = \sqrt{2} \text{  a.s.}\]
+\end{theorem}
+\begin{proof}
+    \textcolor{red}{Proof}
+\end{proof}
 
 \subsection{Markov Chains}
+\subsubsection{Condition Expectation}
+\begin{definition}[Conditional Expectation]
+    Let $X$ be a random variable on $(\om, \cF, \prob)$ with $\E[|X|]< \infty$, $\Sigma$ a $\sigma$-subalgebra of $\cF$. Then $\E[X|\Sigma]$ is any $\Sigma$-measurable random variable satisfying,
+    \[\int_{A} \E[X|\Sigma] d\prob = \int_A X d\prob\]
+    for all $A \in \Sigma$.
+\end{definition}
+\begin{remark}
+    The existence and uniqueness up to a measure 0 set of this construction will be assumed for now and proven later. \textcolor{red}{MAKE SURE THIS IS PROVEN LATER IN RN SECTION}
+\end{remark}
 
+\begin{prop}
+    Conditional expectation satisfies the following properties,
+    \begin{enumerate}
+        \item If $X$ is $\Sigma$-measurable, then $\E[X|\Sigma] = X$.
+        \item $\E[\E[X|\Sigma]] = \E[X]$
+        \item If $X \geq 0$, then $\E[X|\Sigma] \geq 0$ almost surely.
+        \item $\E[a_1X_1 + a_2X_2|\Sigma]= a_i \E[X_i|\Sigma] + a_2\E[X_2|\Sigma]$
+        \item If $Z$ is $\Sigma$-measurable and bounded then $\E[ZX|\Sigma] = Z\E[X|\Sigma]$ almost surely.
+        \item If $Z$ is a bounded $\Sigma$-measurable random variable, then $\E[Z\E[X|\Sigma]] = \E[ZX]$.
+        \item If $\Sigma' \subset \Sigma \subset \cF$, then $\E[\E[X|\Sigma]|\Sigma'] = \E[X|\Sigma']$
+        \item Conditional Jensen's Inequality: If $\vp$ is a convex real valued function, then $\vp(\E[X|\Sigma]) \leq \E[\vp(X)|\Sigma]$
+    \end{enumerate}
+\end{prop}
+\begin{proof}
+    1 follows trivially from the definiton. For 2, we take $A = \om$ and see that from the definition,
+    \[\E[\E[X|\Sigma]] = \int_{\om}\E[X|\Sigma] d \prob = \int_{\om} X d \prob = \E[X]\]
+
+    For 3, we let $A = \E[X|\Sigma]^{-1}(-\infty, 0)$. Notice that since $(-\infty, 0) \in \cB$, $A \in \Sigma$. Therefore we know that,
+    \[0 \geq \int_A \E[X|\Sigma]d\prob = \int_A X d \prob \geq 0\]
+    Thereofore $\int_A\E[X|\Sigma]d\prob = 0$ and since $\E[X|\Sigma] < 0$ on $A$, this implies that $\prob(A) = 0$.
+
+    To prove 4, first notice that the left hand side is clearly $\Sigma$-measurable, so it satisfies the first condition of the definition. To check the second condition, we let $A \in \Sigma$ and observe,
+    \[\int_A a_1X_1 + a_2X_2 d\prob = a_1\int_A X_1 d \prob + a_2\int X_2d\prob\] \[ = a_1 \int \E[X_1|\Sigma] d \prob + a_2 \int \E[X_2|\Sigma] d\prob = \int a_1 \E[X_1|\Sigma] + a_2 \E[X_2|\Sigma] d \prob\]
+
+    To prove 5, we use simple functions to approximate $Z$ from below via the following formula. Let $M$ be such that $|Z| \leq M$,
+    \[\vp_n = \sum_{k = -nM}^{nM-1} \frac{k}{n} 1_{Z^{-1}([\frac{k}{n}, \frac{k+1}{n}))}\]
+    Therefore we have that $\vp_n(\omega) \leq Z(\omega) < \vp(\omega) + \frac{1}{n}$ and furthermore, note that because $Z$ is $\Sigma$-measurable, $Z^{-1}([\frac{k}{n},\frac{k+1}{n})) \in \Sigma$. We know that $|\vp_n X| \leq M|X|$, so for any $A \in \Sigma$, we can apply the dominated convergence theorem to see that,
+    \[\int_A Y \E[X|\Sigma] d\prob = \lim_{n \to \infty} \int \vp_n \E[X|\Sigma] d \prob = \lim_{n \to \infty} \sum_{k = -nM}^{nM - 1} \frac{k}{n} \int_{A \cap Z^{-1}[\frac{k}{n}, \frac{k_1}{n})]}\E[X|\Sigma]d\prob\]
+    \[= \lim_{n \to \infty} \sum_{k = -nM}^{nM - 1} \frac{k}{n} \int_{A \cap Z^{-1}[\frac{k}{n}, \frac{k_1}{n})]}Xd\prob = \lim_{n \to \infty} \int \vp_n X d\prob = \int YX d \prob\]
+    So $Y \E[X|\Sigma]$ is $\Sigma$ measurable and satisfies $\int_A Y\E[X|\Sigma]d\prob = \int_A YX d\prob$ for all $A \in \Sigma$. 6 then follows from 5 and 2. 
+
+    For 7, we observe that for $A \in \Sigma' \subset \Sigma$,
+    \[\int_A \E[\E[X|\Sigma]|\Sigma'] d\prob = \int_A \E[X|\Sigma]d\prob = \int_A X d\prob\]
+
+    Lastly, to prove the conditional Jensen's inequality, notice that for $\vp$ convex, we can write,
+    \[\vp(x) = \max_{\substack{h \leq \vp\\h \text{ linear}}} h(x)\]
+    By property 4 for any $h \leq \vp$ we have
+    \[\E[\vp(X)|\Sigma] \geq \E[h(X)|\Sigma] = h(\E[X|\Sigma])\]
+    which implies,
+    \[\E[\vp(X)|\Sigma] \geq \max_{\substack{h \leq \vp \\ h \text{ linear}}} h(\E[X|\Sigma]) = \vp(\E[X|\Sigma])\]
+\end{proof}
+
+The following examples should help to connect this definition of conditional expectation with our usual understanding. Intuitively, we want to think of $\Sigma$ as information we know.
+
+\begin{example}[No Information]
+    Suppose that $X$ is such that $\sigma(X)$ is independent from $\Sigma$. Then in this case, $\E[X|\Sigma] = \E[X]$. To see this, note that for any $A \in \Sigma$, $X$ and $1_A$ are independent, therefore,
+    \[\int_A X d \prob = \E[X1_A] = \E[X]\E[1_A] = \int_A \E[X]d \prob\]
+\end{example}
+
+\begin{example}[Averaging]
+    Let $\om_1, \om_2, ...$ be a (finite or infinite) partition of $\om$ into disjoint sets of positive measure, and let $\Sigma = \sigma(\om_1, \om_2, ...)$. Then for $\omega \in \om_i$, we have,
+    \[\E[X|\Sigma] = \frac{\E[X1_{\om_i}]}{\prob(\om_i)} = \frac{\int_{\om_i} Xd\prob}{\prob(\om_i)}\]
+    So in words, in this case $\E[X|\Sigma]$ is the random variable such that it's value on $\omega \in \om_i$ is the average of $X$ over $\om_i$. 
+\end{example}
+
+\begin{example}[Conditioning on a Random Variable]
+    For random variables $X$ and $Y$ we can obtain the usual definiton of $\E[X|Y]$ from our definition by taking $\E[X|Y] = \E[X|\sigma (Y)]$.
+\end{example}
+
+\begin{prop}
+    Suppose that $X$ and $Y$ are random variables with joint density $f(x,y)$, and suppose for simplicity that $\prob(Y = y) = \int f(x,y) dx > 0$ for all $y$. If $\E[|g(X)|]<\infty$, then, $\E[g(X)|Y] = h(Y)$ for,
+    \[h(y) = \frac{\int g(x) f(x,y)dx}{\int f(x,y) dx}\]
+
+    To drop the condition that $\int f(x,y) dx > 0$ for all $y$, we simply define $h$ by,
+    \[h(y) \int f(x,y)dx = \int g(x) f(x,y)dx\]
+    namely, $h(y)$ can take on any values when $\int f(x,y) dx = 0$.
+\end{prop}
+
+\begin{proof}
+    $h(Y)$ is clearly $\sigma(Y)$-measurable. Therefore we just need to check that for $A \in \sigma(Y)$, $\int h(Y)d\prob = \int g(X) d\prob$. It is sufficient to check this for $A = Y^{-1}([a,b])$. Then we have,
+    \[\int_A h(Y) d\prob = \int_a^b \int h(y)f(x,y)dx dy = \int_a^b h(y)\int f(x,y)dx dy\]
+    \[= \int_a^b [\frac{\int g(x)f(x,y)dx}{\int f(x,y)dx}] \int f(x,y)dx dy = \int_a^b \int g(x)f(x,y)dxdy = \int_A g(X)d \prob\]
+\end{proof}
+
+\begin{example}[Conditional Probability]
+    In particular in the above proposition, if we take $g$ to be an indicator function of $X$, where $\int f(x,y)dx > 0$ we can write,
+    \[\E[1_A(X)|Y](y) = \frac{\int 1_{X(A)}(x)f(x,y)dx}{\int f(x,y)dx} =  \frac{\prob(X \in A, Y = y)}{\prob(Y=y)}\]
+    which is the familiar formula for conditional probability.
+\end{example}
+
+\begin{example}
+    Suppose that $X$ and $Y$ are independent, and $\vp$ is such that $\E[|\vp(X,Y)|] < \infty$. Let $g(x) = \E[\vp(x,Y)]$. Then,
+    \[\E[\vp(X,Y)|X] = g(X)\]
+    Clearly $g(X)$ is $\sigma(X)$-measurable. To demonstrate this, we see that for any $A \in \sigma(X)$, $A = \{X \in C\}$ for some $C \in \cB$. Then,
+    \[\int_A \vp(X,Y)d \prob = \int \int \vp(x,y) 1_C(x) \nu(dy) \mu(dx) = \int 1_C(x) g(x) \mu(dx) = \int_A g(X)d \prob\]
+\end{example}
+
+
+\subsubsection{Markov Chain Definition and Examples}
+\begin{definition}[Transition Probability]
+    Let $(S, \cS)$ be a measurable space. A function $\pi: S \times \cS \to \R$ is said to be a transition probability if,
+    \begin{enumerate}
+        \item For all $s \in S$, $A \mapsto \pi(s,A)$ is a probability measure.
+        \item For all $A \in \cS$, $s \mapsto \pi(s,A)$ is a measurable function
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}[Markov Chain]
+    A sequence of random varaibles $X_0,X_1,...$ on $(S,\cS)$ with corresponding filtration $\cF_k = \sigma(X_0,...,X_k)$ is a Markov chain with transition probabilities $\pi_{k,k+1}$ if,
+    \[\prob(X_{k+1} \in B|\cF_k) = \prob(X_{k+1} \in B|X_0,...,X_k) = \pi_{k,k+1}(X_k,B)\]
+    (i.e. the probability distribution of $X_{k+1}$ depends only on $X_k$). If $\pi_{k,k+1}$ does not depend on $k$, then the Markov process is time-homogenous and we denote the transition probability $\pi$.
+\end{definition}
+
+\begin{remark}
+    Note that we could generalize this definition for a general filtration $\cF_0 \subset \cF_1 \subset \cF_2 \subset ... \subset \cF$.
+\end{remark}
+
+Given a sequence of transition probabilities and an initial distribution $\mu$ on our state space $(S,\cS)$ we can define a consistent set of finite dimensional distributions on $X_0,...,X_n$ for all $n$ by,
+\[\prob_{\mu}(X_j \in B_j, 0 \leq j \leq n) = \int_{B_0}...\int_{B_n} \pi_{n-1,n}(x_{n-1},dx_n)... \pi_{0,1}(x_0, dx_1) \mu(dx_0)\]
+If our space $(S,\cS)$ is sufficiently nice, then we can apply Kolmogorov's extension theorem to construct a probability measure $\prob_{\mu}$ on the sequence space $(\om, \cF) = (S^{\{0,1,...\}},\cS^{\{0,1,...\}})$ so that for any sequence element $\omega \in \om$, the coordinate projection $X_n(\omega) = omega_n \in S$ has the desired distribution. This is useful as it allows us to use shift operators, $\theta_n(\omega_0,\omega_1,...) = (\omega_n, \omega_{n+1},...)$.
+
+This construction gives us a large family of probability distributions for this sequence, namely a different distribution for each initial distribution $\mu$, however we can note that to specify this family we only need a distribution $\prob_x$ for each state $x \in S$ (or more specifically, for the distribution $\mu_x$ that assigns probability 1 to $x$ and 0 else) since we have,
+\[\prob_{\mu}(A) = \int \prob_x(A)\mu(dx)\]
+To provide some intuition for what this is saying, in the discrete case we have that,
+\[\prob_{\mu}(\omega) = \sum_{x \in S} \prob_x(\omega)\prob_{\mu}(X_0 = x)\]
+
+\begin{theorem}
+    In the above construction, the coordinate functions $X_0, X_1, ...$ form a markov chain with respect to the filtration $\cF_n = \sigma(X_0,...,X_n)$ for all $\mu$ with transition probabilities $\pi_{k, k+1}$.
+\end{theorem}
+\begin{proof}
+    We need to show,
+    \[\prob_{\mu}(X_{n+1} \in B|\cF_n) = \pi_{n,n+1}(X_n, B)\]
+    Recall from our definition of conditional probability that,
+    \[\prob_{\mu}(X_{n+1} \in B|\cF_n) = \E_{\mu}[1_{X_{n+1} \in B}|\cF_n]\]
+    Therefore, we need to check that for all $A \in \sigma(X_0,...,X_n)$, 
+    \[\int_A 1_{X_{n+1} \in B}d\prob_{\mu} = \int_A \pi_{n,n+1}(X_n,B)d\prob_{\mu}\]
+    Let $A = \{X_0 \in B_0, ..., X_n \in B_n\}$ (since this is a $\pi$ system, proving the equality for $A$ of this type will imply the equality for all $A \in \cF_n$). Then,
+    \[\int_A 1_{X_{n+1 \in B}}d\prob_{\mu} = \prob_{\mu}(X_j \in B_j, 0 \leq j \leq n, X_{n+1} \in B)\]
+    \[= \int_{B_0} ... \int_{B_n} \int_B \pi_{n,n+1}(x_n, dx_{n+1})... \pi_{0,1}(x_0,dx_1)\mu(dx_0)\]
+    \[= \int_{B_0} ... \int_{B_n} \pi_{n,n+1}(x_n, B) \pi_{n-1,n}(x_{n-1}, dx_n)... \pi_{0,1}(x_0,dx_1)\mu(dx_0) = \int_A \pi_{n,n+1}(X_n,B)d\prob_{\mu}\]
+\end{proof}
+
+For the rest of this section we will consider primarily time-homogenous Markov processes.
+
+
+\begin{example}[Random Walk on $\Z^n$]
+    Let $\xi_1, \xi_2, ...$ be i.i.d. random vectors in $\Z^n$. Then,
+    \[S_n = X_0 + \sum_{i = 1}^n \xi_i\]
+    is a time homogenous Markov Chain with transition probability,
+    \[\prob(S_{n+1} = k| S_n = j) = \prob(X_{n+1} = k - j)\]
+    One commonly studied example is the simple symmetric random walk where $\xi_i$ is $\pm 1$ with probability $\frac{1}{2}$ each.
+\end{example}
+
+\begin{example}[Random Walk on a Graph]
+    Let $G$ be a directed graph with node set $N(G)$ and edge set $E(G)$. Let $w$ be a weighting of the edges $E(G)$ such that $w \geq 0$ and for all $n \in (G)$, $\sum_{(n,n') \in E(G)} w((n,n')) = 1$ (for simplicity of notation, we state $w(n,n') = 0$ if $(n,n') \notin E(G)$). Then we can define a simple random walk on $G$ with transition probabilities,
+    \[\prob(X_{k+1} = n'| X_{k} = n) = w((n,n'))\]
+\end{example}
+
+\begin{example}[Ehrenfest Chain]
+    The Ehrenfest chain models the motion of air particles in 2 chambers separated by a small opening. Let $r$ be the number of particles in total and $X_n$ the number in one chamber. At each time step we uniformly choose a particle from either chamber and move it to the other. The transition probabilities for the Markov chain are then given by,
+    \begin{align*}
+        &\pi(k,k+1) = \frac{(r-k)}{r}\\
+        &\pi(k,k-1) = \frac{k}{r}\\
+        &\pi(i,j) = 0 \text{ else}
+    \end{align*}
+\end{example}
+
+\begin{example}[Branching Process]
+    Let $\{\xi_{i,j}\}_{i,j \geq 0}$ be i.i.d. nonnegative integer valued random variables. We inductively define a markov process by setting $X_0 = k > 0$ and,
+    \[X_{n+1} = \sum_{i = 1}^{n} \xi_{n,i}\]
+    The transition probabilities are,
+    \[\pi(i,j) = \prob(\sum_{k = 1}^i \xi_{k}) = j\]
+    This process can be thought of as a simple model for asexual population growth, where $\xi_{n,i}$ is the number of offspring the $i$-th individual in generation $n$ produces.
+\end{example}
+
+\begin{example}[Wright-Fisher Model]
+    This Markov process is defined inductively by setting $X_{n+1}$ to be a $Bin(N, \frac{X_n}{N})$ random variable. That is, the transition probabilities are given by,
+    \[\pi(i,j) = \binom{N}{j}(\frac{i}{N})^j(1-\frac{i}{N})^{N-j}\]
+    This model can be useful for studying the evolution of population genetics.
+\end{example}
+
+\begin{definition}[Absorbing State]
+    An absorbing state of a markov chain $X_0, X_1,...$ is a state $x$ such that $\pi(x,x) = 1$.
+\end{definition}
+
+Example 21 and example 22 both contain absorbing states. In example 20 the absorbing state is 0 and in example 21 both 0 and $N$ are absorbing states.
+
+\begin{example}[Queuing model]
+    Let $\xi_1, \xi_2,...$ be i.i.d. nonnegative integer valued random variables (think of these as the number of customers arriving at time $i$). Then we define,
+    \[X_{k+1} = \begin{cases}
+        X_k + \xi_{k+1} - 1 & X_k \neq 0\\
+        \xi_{k + 1} & \text{else}
+    \end{cases}\]
+    which models the number of people in line at time $k$ (assuming a single person is served in each time step if there is a person to be served).
+\end{example}
+
+\begin{definition}[Transition Matrix]
+    For a markov model on a finite statespace $S= \{1,...,N\}$ we can define the transition matrix,
+    \[(\pi)_{i,j} = \prob(X_{n+1} = j|X_n = i)\]
+    Therefore if $\mu$ is a distribution vector for $X_n$, then we obtain a distribution vector for $X_{n+1}$ by taking $\mu^T \pi$.
+\end{definition}
+
+
+
+\subsubsection{Stopping Times}
+\begin{definition}
+    A stopping time $\tau$ is a nonnegative integer valued random variable on $(\om, \cF, \prob) = (S^{\{0,1,...\}},\cS^{\{0,1,...\}}, \prob)$ (which may take on the value $\infty$) such that for all $n$, $\tau^{-1}(n) \in \sigma(X_0,...,X_n)$.
+\end{definition}
+
+Stopping times should be thought of as the time at which an event happens in your Markov chain. The measurability condition requires that if this event happens at time step $n$, we know it by time step $n$ without any information about the future. The following examples and non-examples illustrate this.
+
+\begin{example}
+    The following are examples of stopping times on a Markov chain:
+    \begin{enumerate}
+        \item $\tau$ = the first $n$ such that $X_n = s$ for $s \in S$
+        \item $\tau$ = 2 steps after the first $n$ such that $X_n = s$
+    \end{enumerate}
+    The following are \textit{not} examples of stopping times:
+    \begin{enumerate}
+        \item $\tau$ = The last time we reach a state $s$
+        \item $\tau$ = The time step right before the first time we reach a state $s$
+    \end{enumerate}
+\end{example}
+
+\begin{prop}
+    If $\tau_1, \tau_2$ are stopping times, then the following are stopping times as well,
+    \begin{enumerate}
+        \item $\tau_1 + \tau_2$
+        \item $\min(\tau_1,\tau_2)$
+        \item $\max(\tau_1,\tau_2)$
+    \end{enumerate}
+    However $\tau_1\tau_2$ and $\tau_1 - \tau_2$ are not necessarily stopping times.
+\end{prop}
+
+\begin{example}
+    For every state $x \in S$ of our Markov chain, the random variable $\tau_x =$ the first visit (after time 0) to state $x$ is a stopping time. 
+\end{example}
+
+
+\subsubsection{Markov Properties}
+\begin{theorem}[Monotone Class Theorem]
+    Let $\cA$ be a $\pi$-system that contains $\om$ and let $\cH$ be a collection of real-valued functions that satisfies,
+    \begin{enumerate}
+        \item If $A \in \cA$, then $1_A \in \cH$
+        \item If $f,g \in \cH$ then $f + g \in \cH$ and $cf \in \cH$.
+        \item If $f_n \in \cH$ are nonnegative and increase to a bounded function $f$, then $f \in \cH$
+    \end{enumerate}
+    Then $\cH$ contains all bounded functions that are measurable with respect to $\sigma(\cA)$.
+\end{theorem}
+\begin{proof}
+    By $\om \in \cA$, and conditions 2 and 3, $\mathcal{G} = \{1_A|1_A \in \cH\}$ is a $\pi-\lambda$ system. 1 and 2 implies that $\cH$ contains all simple functions and 3 implies that $\cH$ contains all bounded measurable functions.
+\end{proof}
+
+\begin{theorem}[Markov Property]
+    Let $X_0,X_1,...$ be a time homogenous Markov chain on state space $(S, \cS)$ and let $(\om, \cF) = (S^{\{0,1,...\}}, \cS^{\{0,1,...\}})$. Let $Y: \om \to \R$ be bounded and measurable. Then,
+    \[\E_{\mu}[Y \circ \theta_m|\cF_m] = \E_{X_m}[Y]\]
+    where $\E_{\mu}$ is expectation with respect to $\prob_{\mu}$ and $\E_{X_m}[Y]$ should be thought of as the function $\vp(x) = \E_x[Y]$ (i.e. expectation taken with respect to $\prob_x$) evaluated at $X_m$. In particular, if we take $Y$ to be a product of indicator random variables of the form $\prod_{i = 1}^n 1_{X_i \in A_i}$ then,
+    \[\prob_{\mu}(X_{m+1} \in A_1,...,X_{m+n} \in A_n|\cF_m) = \prob_{X_m}(X_1 \in A_1,...,X_n \in A_n)\]
+\end{theorem}
+
+In words, this means that the probability of things that happen after $X_m$ depends only on $X_m$ (i.e. the process is \textit{memoryless}).
+\begin{proof}
+    We will prove this theorem first for the class of functions $Y(\omega) = \prod_{0 \leq k \leq n} g_k(\omega_k)$ where $g_k$ is bounded an measurable. We start by checking the conditional expectation property against $A = \{\omega:\omega_0 \in A_0, ..., \omega_m \in A_m\} \in \cF_m$. We have,
+    \[\int_A \prod_{k = 0}^n g_k(X_{m+k})d\prob_{\mu}\]
+    \[= \int_{A_0} \mu(dx_0) \int_{A_1}\pi(x_0,dx_1) ... \int_{A_m}\pi(x_{m-1},dx_m) g_0(x_m) \int \pi(x_m,dx_{m+1})g_1(x_{m+1})...\]\[ \int \pi(x_{m + n -1}, dx_{m+n})g_n(x_{m +n})\]
+    \[= \int_A \E_{X_m}[\prod_{k = 0}^n g_k(X_k)]d\prob_{\mu}\]
+    Now since $A$ of this type form a $\pi$-system and sets satisfying this property form a $\lambda$ system, the property is true for all $A \in \cF_m$ and therefore we have that $\E[\prod_{k=0}^n g_k \circ \theta_m |\cF_m]= \E_{X_m}[\prod g_k]$.
+
+    Now, let $\cH$ be the class of functions $Y$ such that $\E[Y \circ \theta_m|\cF_m] = \E_{X_m}[Y]$. From the proof above we see that $\cH$ contains functions of the form $\prod_{k = 0}^n g_k$. Let $\cA$ be the collection of sets of the form $\{\omega: \omega_0 \in A_0, ..., \omega_k \in A_k\}$. Taking $g_k = 1_{A_k}$ we see that $\cH$ contains all $1_A$ for $A \in \cA$. Furthermore, by the linearity property of conditional expectation and monotone convergence, we see that $\cH$ satisfies all conditions of the monotone class theorem, and therefore contains all bounded measurable functions with respect to $\sigma(\cA) = \cF$.
+\end{proof}
+
+\begin{theorem}[Strong Markov Property]
+    Let $\tau$ be a stopping time and define $\cF_{\tau} = \{A \in \cF| A \cap \{\tau = n\} \in \cF_n \text{ for all } n\}$. On $\tau < \infty$ we can define the shift operator $\theta_{\tau}(\omega_0,\omega_1,...) = (\omega_{\tau}, \omega_{\tau+1}, ...)$. Suppose that for each $n$, $Y_n: \omega \to \R$ is a bounded measurable function. Then on $\tau < \infty$,
+    \[\E_{\mu}[Y_{\tau} \circ \theta_{\tau}|\cF_{\tau}] = \E_{X_{\tau}}[Y_{\tau}]\]
+    Similar to the normal Markov property, this in particular tells us that,
+    \[\prob_{\mu}(X_{\tau+1} \in A_1,...,X_{\tau_n \in A_n}|\cF_{\tau}) = \prob_{X_{\tau}}(X_1 \in A_1,...,X_n \in A_n)\]
+\end{theorem}
+In words, this states that the probability of things that happen after $X_{\tau}$ for $\tau$ a stopping time depends only on $X_{\tau}$.
+
+\begin{proof}
+    Let $A \in \cF_{\tau}$. Then we have,
+    \[\int_A Y_{\tau} \circ \theta_{\tau} d\prob_{\mu} = \sum_{m = 0}^{\infty} \int_{A \cap \{\tau = n\}} Y_{\tau} \circ \theta_{\tau}d\prob_{\mu} = \sum_{m =0}^{\infty}\int_{A \cap \{\tau = m\}} Y_m \circ \theta_m d\prob_{\mu}\]
+    By the Markov property and the fact that $A \cap \{\tau = m\} \in \cF_m$,
+    \[\sum_{m = 0}^{\infty}\int_{A \cap \{\tau = m\}}Y_m\circ \theta_n d\prob_{\mu} = \sum_{m = 0}^{\infty} \int_{A \cap \{\tau = m\}} \E_{X_m}[Y_m] d \prob_{\mu} = \int_A \E_{X_{\tau}}[Y_{\tau}]d\prob_{\mu}\]
+    Therefore $\E_{\mu}[Y_{\tau} \circ \theta_{\tau}|\cF_{\tau}] = \E_{X_{\tau}}[Y_{\tau}]$.
+\end{proof}
+
+\subsubsection{Categorization of States}
+\begin{definition}[Transient/Recurrent State]
+    A state $x \in S$ of a Markov chain $X_0,X_1,...$ with transition probability $\pi$ is transcient if $\prob_x(\tau_x < \infty) < 1$. A state $x$ is recurrent if $\prob_x(\tau_x < \infty) = 1$. 
+\end{definition}
+\begin{example}
+    Consider a random walk on the following graph,
+    \begin{center}
+        \begin{tikzcd}
+            A \arrow[r, "1"] & B \arrow[r,bend left, "1"]  & C \arrow[l, bend left, ".5"]\arrow[loop right, ".5"]
+        \end{tikzcd}
+    \end{center}
+    The state A is transcient since $\prob_A(\tau_A < \infty) = 0$. The state $C$ is recurrent because, starting at $C$ we can either loop back to $C$ or move to $B$ and then back to $C$ with probability 1, therefore, $\prob_C(\tau_C \leq 2) = 1$. $B$ is slightly trickier since it is theoretically possible that we could continue to loop at $C$, however,
+    \[\prob_B(\tau_B = B) = \prob_C(X_k = C, k \geq 0) = \lim_{k \to \infty} (\frac{1}{2})^k = 0\]
+\end{example}
+
+\begin{definition}[Positive/Null Recurrent State]
+    A state $x$ is positive recurrent if it is recurrent and $\E_x[\tau_x] < \infty$. $x$ is null recurrent if it is recurrent and $\E[\tau_x] = \infty$.
+\end{definition}
+
+\begin{definition}[Irreducible Markov Chain]
+    A Markov chain is irreducible if for all $x,y \in S$, There exists some $1 \leq n < \infty$ such that $\pi^{(n)}(x,y) > 0$ (i.e. the transition probability of going from $x$ to $y$ in $n$ steps). Equivalently, if we let $\tau_y$ be the stopping time of the first visit after 0 to $y$, $\prob_x(\tau_y<\infty) > 0$.
+\end{definition}
+
+\begin{prop}
+    Let $X_0, X_1, ...$ be an irreducible Markov chain. Then all states are of the same type (i.e. transient or positive/null recurrent).
+\end{prop}
+\begin{proof}
+    First we begin by showing that if $x \in S$ is recurrent, then all other states $y \in S$ are recurrent. By the irreducible property we have that there exists a $k$ such that $\pi^{(k)}(x,y) > 0$. This implies that $\prob_x(\tau_y<\infty)>0$. Let $m$ be such that $\pi^{(m)}(y,x) > 0$, then,
+    \[\prob_y(\tau_y < \infty) \geq \pi^{(m)}(y,x) \prob_x(\tau_y < \infty) > 0\]
+    Now we prove that if $x \in S$ is positive recurrent, then all other states $y \in S$ are positive recurrent as well. First note that since there exists a $k$ such that $\pi^{(k)}(x,y)>0$, then $\prob_x(\tau_y < \tau_x)>0$. We have,
+    \[\infty > \E_x[\tau_x] = \E_x[\tau_x(1_{\tau_y < \tau_x} + 1_{\tau_x < \tau_y})]\geq \E_x[\tau_x1_{\tau_y < \tau_x}]\]
+    Now we let $\tau_{y \to x}$ be the number of steps between the first visit to $y$ and the first visit to $x$ after visiting $y$. On the event space $\tau_y < \tau_x$ we can write $\tau_x = \tau_y + \tau_{y \to x}$. We use this substitution to get,
+    \[\E_x[1_{\tau_y < \tau_x}\tau_x] = \E_x[1_{\tau_y < \tau_x}(\tau_x + \tau_{y\to x})] \geq \E_x[1_{\tau_y<\tau_x}\tau_{y \to x}]\]
+    Now we note that by the memoryless property, $1_{\tau_x < \tau_y}$ and $\tau_{y \to x}$ are independent. This is because the distribution of $\tau_{y \to x}$ is the same whether or not $x$ is visited before $y$. Therefore we can apply the independence property and the Markov property to get,
+    \[\E_x[1_{\tau_y < \tau_x}\tau_{y \to x}] = \E_x[1_{\tau_y < \tau_x}]\E_x[\tau_{y \to x}] = \prob_x(\tau_y < \tau_x)\E_y[\tau_x]\]
+    Letting $p = \prob_x(\tau_y < \tau_x)$, we have that,
+    \[\E_y[\tau_x] \leq \frac{1}{p}\E_x[\tau_x]<\infty\]
+    Next we want to prove a similar inequality for $\E_x[\tau_y]$.
+    \[\E_x[\tau_y] = \E_x[\tau_y(1_{\tau_y < \tau_x} + 1_{\tau_x < \tau_y})] \leq \E_x[\tau_y 1_{\tau_y < \tau_x}] + \E_x[(\tau_x + \E_x[\tau_y])1_{\tau_x < \tau_y}]\]\[= \E_x[\tau_x] + \E_x[\tau_y]\prob(\tau_x<\tau_y) = \E_x[\tau_x] + (1-p)\E_x[\tau_y]\]
+    Therefore we have that, $\E_x[\tau_y] \leq \frac{1}{p} \E_x[\tau_x]$. Combining these bounds we get,
+    \[\E_y[\tau_y] \leq \E_y[\tau_x] + \E_x[\tau_y] \leq \frac{2}{p}\E_x[\tau_x] < \infty\]
+\end{proof}
+
+From this point 
+
+\begin{theorem}
+    Let $X_0, X_1,...$ be a irreducible Markov chain 
+\end{theorem}
+
+\subsubsection{Invariant Measures}
+
+\begin{definition}[Invariant/Stationary Measure]
+    Given a Markov chain with state space $S$ and transition probability $\pi$, then a measure $\mu$ is invariant or stationary if,
+    \[\int \pi(x,dx) \mu(dx) = \mu(dy)\]
+    in words, this means that the distribution of $X_{n+1}$ is the same as that of $X_n$ under $\prob_{\mu}$.
+\end{definition}
+
+\begin{remark}
+    Note that when $S = \{1,...,N\}$, this is equivalent to $\mu^T \pi = \mu^T$ or $\pi^T \mu = \mu$. Thus $\mu$ is an invariant measure on a finite state space Markov chain if and only if it is a normal eigenvector of the transition matrix with eigenvalue 1.
+\end{remark}
+
+\begin{example}
+    In the simplest example, we can take the random walk on the graph $G$ with 2 nodes $A, B$ and edge set $(A,B)$ and $(B,A)$. That is, at each time step we move to the node we are not currently at with probability 1. This has invariant measure $\mu = \frac{1}{2}(\delta_A + \delta_B)$.
+\end{example}
+
+For the remainder of this section we will consider only Markov chains on countable state spaces. 
 
 \subsection{Martingales}
 \subsubsection{Radon-Nikodym Theorem}
+
 
 \begin{definition}[Absolute Continuity]
 \textcolor{red}{Definition}
@@ -824,7 +1491,9 @@ Let $X_1, X_2, ... $ be i.i.d. random variables distributed according to some co
 \end{theorem}
 
 
-
+\subsection{Point Processes}
+\subsubsection{Poisson Point Processes}
+\subsubsection{Determinental Point Processes}
 \subsection{Large Deviation Principles}
 
 \subsection{Stein's Method}
