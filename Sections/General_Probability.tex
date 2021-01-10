@@ -13,6 +13,7 @@ Let $\om$ be a set. We say $\cF \subset 2^{\om}$ is a $\sigma$-algebra if,
 Note that given 2 we could equivalently require that 1 read $\phi \in \cF$ and that 3 read that $\cF$ is closed to countable intersections.
 \end{definition}
 
+
 \begin{definition}[Measurable Space]
 A pair $(\om, \cF)$ is called a measurable space.
 \end{definition}
@@ -62,6 +63,13 @@ For any collection $\cF \subset 2^{\om}$, there exists a unique $\sigma$-algebra
 This construction requires the axiom of choice \textcolor{red}{why?}.
 \end{remark}
 
+\begin{definition}[Borel Sets]
+    Let $X$ be a topological space with topology $\mathcal{T} \subset 2^X$. We say that $\cB = \sigma(\mathcal{T})$ is the Borel $\sigma$-algebra.
+\end{definition}
+
+\subsubsection{$\pi-\lambda$ Systems}
+
+\textcolor{red}{DO THIS SECTION}
 
 \subsubsection{Carathéodory Extension Theorem}
 
@@ -901,6 +909,7 @@ Let $X_1, X_2, ... $ be i.i.d. random variables distributed according to some co
 
 
 \subsection{Central Limit Theorem}
+
 \subsubsection{Characteristic Functions}
 \begin{definition}[Characteristic Function]
     For a random variable $X$ with distribution $\mu$ on $\R$ and $t \in \R$, the characteristic function $\varphi_X(t)$ is defined to be,
@@ -948,7 +957,7 @@ The following are easily verifyable properties of characteristic functions:
 
 \begin{example}[Uniform]
     For $U \sim Unif[a,b]$,
-    \[\vp_U(t) \frac{1}{it(b-a)}(e^{itb} - e^{ita})\]
+    \[\vp_U(t) = \frac{1}{it(b-a)}(e^{itb} - e^{ita})\]
     If $a = c$ and $b = -c$, then we have that,
     \[\vp_U(t) = \frac{\sin(ct)}{ct}\]
 \end{example}
@@ -1046,8 +1055,7 @@ The following theorem about inverting point masses won't be proven here but foll
     Let $\mu_n, n \geq 1$ be probability measures with characteristic functions $\vp_n$. Then (i) if $\mu_n \Rightarrow \mu$, $\vp(t) \to \vp(t)$ for $\vp$ the characteristic function of $\mu$. (ii) If $\vp_n(t)$ converges pointwise to a limit $\vp(t)$ that is continuous at $0$, then the associated sequence of probability measures is tight and converges weakly to the measure $\mu$ with characteristic function $\vp$.
 \end{theorem}
 \begin{proof}
-    We will first prove (i). Recall from theorem 10 that $\mu_n \Rightarrow \mu$ if and only if for every bounded continuous function $g$, $
-    int g(x)\mu_n(dx) \to \int g(x) \mu(dx)$. We have that,
+    We will first prove (i). Recall from theorem 10 that $\mu_n \Rightarrow \mu$ if and only if for every bounded continuous function $g$, $\int g(x)\mu_n(dx) \to \int g(x) \mu(dx)$. We have that,
     \[\vp_n(t) = \int e^{itx} \mu_n(dx) = \int \cos(tx) \mu_n(dx) + i \int \sin (tx) \mu_n(dx)\] \[\xrightarrow{n \to \infty} \int \cos(tx) \mu(dx) + i\int \sin(tx)\mu(dx) = \vp(t)\]
     Where the limit follows by applying theorem 10 with $g(x) = \cos(tx)$ and $g(x) = \sin(tx)$.
 
@@ -1117,7 +1125,7 @@ The following theorem gives us nice control on the magnitude of fluctuations of 
     \textcolor{red}{Proof}
 \end{proof}
 
-\subsection{Markov Chains}
+\subsection{Conditioning}
 \subsubsection{Condition Expectation}
 \begin{definition}[Conditional Expectation]
     Let $X$ be a random variable on $(\om, \cF, \prob)$ with $\E[|X|]< \infty$, $\Sigma$ a $\sigma$-subalgebra of $\cF$. Then $\E[X|\Sigma]$ is any $\Sigma$-measurable random variable satisfying,
@@ -1125,7 +1133,7 @@ The following theorem gives us nice control on the magnitude of fluctuations of 
     for all $A \in \Sigma$.
 \end{definition}
 \begin{remark}
-    The existence and uniqueness up to a measure 0 set of this construction will be assumed for now and proven later. \textcolor{red}{MAKE SURE THIS IS PROVEN LATER IN RN SECTION}
+    The existence and uniqueness up to a measure 0 set of this construction will be assumed for now and proven later in the section on Radon-Nikodym derivatives.
 \end{remark}
 
 \begin{prop}
@@ -1187,6 +1195,14 @@ The following examples should help to connect this definition of conditional exp
     For random variables $X$ and $Y$ we can obtain the usual definiton of $\E[X|Y]$ from our definition by taking $\E[X|Y] = \E[X|\sigma (Y)]$.
 \end{example}
 
+\begin{example}
+    Suppose that $X$ and $Y$ are independent, and $\vp$ is such that $\E[|\vp(X,Y)|] < \infty$. Let $g(x) = \E[\vp(x,Y)]$. Then,
+    \[\E[\vp(X,Y)|X] = g(X)\]
+    Clearly $g(X)$ is $\sigma(X)$-measurable. To demonstrate this, we see that for any $A \in \sigma(X)$, $A = \{X \in C\}$ for some $C \in \cB$. Then,
+    \[\int_A \vp(X,Y)d \prob = \int \int \vp(x,y) 1_C(x) \nu(dy) \mu(dx) = \int 1_C(x) g(x) \mu(dx) = \int_A g(X)d \prob\]
+\end{example}
+
+\subsubsection{Conditional Probability}
 \begin{prop}
     Suppose that $X$ and $Y$ are random variables with joint density $f(x,y)$, and suppose for simplicity that $\prob(Y = y) = \int f(x,y) dx > 0$ for all $y$. If $\E[|g(X)|]<\infty$, then, $\E[g(X)|Y] = h(Y)$ for,
     \[h(y) = \frac{\int g(x) f(x,y)dx}{\int f(x,y) dx}\]
@@ -1208,15 +1224,164 @@ The following examples should help to connect this definition of conditional exp
     which is the familiar formula for conditional probability.
 \end{example}
 
+This example leads us to the following definition of conditional probability.
+
+\begin{definition}[Regular Conditional Distribution/Probability]
+    Let $(\om, \cF, \prob)$ be a probability space, $X: (\om, \cF) \to (S, \cS)$ a measurable map, and $\cG \subset \cF$ a sub $\sigma$-algebra. $\mu: \om \times \cS \to [0,1]$ is said to be a regular conditional distribution for $X$ given $\cG$ if,
+    \begin{enumerate}
+        \item For each $A \in \cS$, $\mu(-, A)$ is a version of $\prob(X \in A|\cG) = \E[1_{X \in A}|\cG]$.
+        \item For almost every $\omega \in \om$, $\mu(\omega, -)$ is a probability measure on $(S, \cS)$.
+    \end{enumerate}
+    when $(S, \cS) = (\om, \cF)$ and $X$ is the identity map, this is called a regular conditional probability.
+\end{definition}
+
+\textcolor{red}{NEED MORE HERE}
+
+\subsubsection{Radon-Nikodym Theorem}
+
+
+\begin{definition}[Absolute Continuity]
+Let $\mu$ and $\nu$ be measures on $(\om, \cF)$. We say $\nu$ is absolutely continuous with respect to $\mu$ (denoted $\nu << \mu$ \textcolor{red}{Find the right TeX}) if $\mu(E) = 0$ implies $\nu(E) = 0$ for all $E \in \cF$.
+\end{definition}
+
+
+
+\begin{theorem}[Radon-Nikodym Theorem]
+Let $\mu, \nu$ be 2 $\sigma$-finite measures on $(\om, \cF)$ such that $\nu << \mu$. Then there exists a function $f \geq 0$ such that,
+\[\int_E f d\mu = \nu(E)\]
+This function $f$ is called that Radon-Nikodym derivative denoted $\frac{d\nu}{d\mu}$ and is unique up to a $\mu$-measure 0 set. 
+\end{theorem}
+
+
+Before beginning the proof, we will show a couple of simple examples.
+
 \begin{example}
-    Suppose that $X$ and $Y$ are independent, and $\vp$ is such that $\E[|\vp(X,Y)|] < \infty$. Let $g(x) = \E[\vp(x,Y)]$. Then,
-    \[\E[\vp(X,Y)|X] = g(X)\]
-    Clearly $g(X)$ is $\sigma(X)$-measurable. To demonstrate this, we see that for any $A \in \sigma(X)$, $A = \{X \in C\}$ for some $C \in \cB$. Then,
-    \[\int_A \vp(X,Y)d \prob = \int \int \vp(x,y) 1_C(x) \nu(dy) \mu(dx) = \int 1_C(x) g(x) \mu(dx) = \int_A g(X)d \prob\]
+    Let $\mu = \frac{1}{2}(\delta_x + \delta_y)$ and let $\nu = \delta_x$. Clearly $\nu << \mu$. We can easily check that $f = 21_x$ satisfies the conditions of the Radon-Nikodym derivative,
+    \[\int_E f d\mu = 21_x(E)\frac{1}{2}(\delta_x(E) + \delta_y(E)) = \begin{cases}
+        1 & x \in E\\
+        0 & \text{else}
+    \end{cases}\]
 \end{example}
 
+\begin{example}
+    Let $\mu$ and $\nu$ be discrete distributions defined on a countable space (for simplicity, we'll say that they are defined on the space $\N$). Then we can write,
+    \[\mu = \sum_{k = 0}^{\infty} p_k \delta_k \quad \quad \nu = \sum_{k = 0}^{\infty} q_k \delta_k\]
+    Then $\nu << \mu$ if and only if $q_k = 0$ anywhere $p_k = 0$. Define $f = \sum_{k = 0}^{\infty} \frac{q_k}{p_k} 1_{k}$ (where we just set terms for which $p_k = q_k = 0$ to 0). Then we have,
+    \[\int_E f d\mu = \sum_{k \in E} f(k) p_k = \sum_{k \in E} \frac{q_k}{p_k}p_k = \sum_{k \in E} q_k = \nu(E)\]
+\end{example}
 
-\subsubsection{Markov Chain Definition and Examples}
+\begin{example}
+    Let $\mu$ be a measure that is absolutely continuous with respect to the Lesbegue measure (in this case we simply say that $\mu$ is absolutely continuous). Then there is an $f$ such that,
+    \[\mu(E) = \int_E f(x)dx\]
+    In the case where $\mu$ is a probability distribution, then $f$ is the probability densitiy function of $\mu$. Examples of this include $\frac{1}{\sqrt{2\pi}}e^{x^2/2}$ for the normal distribution and \textcolor{red}{others}.
+
+    If $\nu << \mu$ are 2 absolutely continuous measures with denisty functions $g$ and $h$ respectively, then their Radon-Nikodym derivative is given by $\frac{d\nu}{d\mu} = \frac{g}{h}$ (where $h(x) \neq 0$, we may take it to be 0 otherwise). To check this, we see,
+    \[\nu(E) = \int_E g d\nu = \int_E g(x)dx = \int_E \frac{g(x)}{h(x)}h(x)dx = \int_E \frac{g}{h}d\mu\]
+\end{example}
+
+Now we need to introduce a few definitions before moving onto the proof of the thoerem.
+
+\begin{definition}[Singular Measures]
+    Measures $\mu_1$ and $\mu_2$ are said to be mutually singular (or $\mu_1$ is singular with respect to $\mu_2$) if there is a set $A$ such that $\mu_1(A) = 0$ and $\mu_2(A^c) = 0$. This is notated $\mu_1 \perp \mu_2$.
+\end{definition}
+
+\begin{definition}[Signed Measure]
+    Let $(\om, \cF)$ be a measurable space. A function $\alpha: \cF \to (-\infty, \infty]$ is a signed measure if,
+    \begin{enumerate}
+        \item $\alpha(\phi) = 0$
+        \item If $E = \bigcup_i E_i$ where the $E_i$ are disjoint, then $\alpha(E) = \sum_i \alpha(E_i)$ in the following sense: If $\alpha(E) < \infty$, then the sum converges absolutely, and if $\alpha(E) = \infty$, then $\sum_i \alpha^-(E_i) < \infty$ and $\sum_i \alpha(E_i) = \infty$.
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}[Positive/Negative Set]
+    Let $(\om, \cF)$ be a measurable space and let $\alpha$ be a signed measure. A set $A \in \cF$ is positive if every measurable $B \subset A$ has $\mu(B) \geq 0$. Likewise a set $A$ is negative if every measurable $B \subset A$ has $\alpha(B) \leq 0$.
+\end{definition}
+
+Next we will prove 3 decomposition theorems for signed measures.
+
+\begin{theorem}[Hahn Decomposition]
+    Let $\alpha$ be a signed measure. Then there is a positive set $A$ and a negative set $B$ such that $\om = A \cup B$ and $\emptyset = A \cap B$. Furthermore, this decomposition is unique up to a measure 0 set.
+\end{theorem}
+
+\begin{proof}
+    We first introduce the following 2 lemmas,
+    \begin{lemma}
+        If the sets $A_n$ are positive, then $A = \bigcup_n A_n$ are positive, and likewise for negative sets.
+    \end{lemma}
+    \begin{proof}
+        Let $B \subset A$. Then we can write we can write $B = \cup_n B_n$ where $B_n = A_n \cap (\bigcup_{m = 1}^{n-1}A_m^c) \subset A_n$. These sets are all disjoint and, as they are subsets of a positive set, we have that,
+        \[\alpha(B) = \sum_n \alpha(B_n) \geq 0\]
+    \end{proof}
+    \begin{lemma}
+        Let $E$ be a measurable set with $\alpha(E)< 0$ Then there is a negative set $F \subset E$ with $\alpha(F) < 0$ (and likewise for positive sets).
+    \end{lemma}
+    \begin{proof}
+        If $E$ is negative, this is true trivially, so assume $E$ is not negative. Let $n_1$ be the smallest possible integer such that there exists a $E_1 \subset E$ such that $\alpha(E_1) > 1/n_1$. We now inductively construct the set $F$ by setting $F_1 = E- E_1$ if $E-E_1$ is not negative, we repeat the procedure with $n_2$ and $E_2 \subset F_1$. If the construction does not stop in finite steps, we define $F = \bigcap_k F_k = E - (\bigcup_k E_k)$.
+
+        First note that because $0 > \alpha(E) > -\infty$ and $\alpha(E_k) \geq 0$ for all $k$, we have that $\alpha(F) < 0$. Furthermore, if there were some $F' \subset F$ such that $
+        alpha(F') > 0$, then we could write $\alpha(F') \geq 1/N$ for some $N$, which is a contradiction by construction of $F$. The proof for positive sets is equivalent.
+    \end{proof}
+    Now, define $c = \inf\{\alpha(B): B \text{ is negative}\}$. By defintion of a signed measure, $0 \geq c > -\infty$. Choose $B_i$ such that $\alpha(B_1) \searrow c$ and define $B = \bigcup_i B_i$. $B$ is negative by lemma 10, therefore $\alpha(B) \geq c$. additionally, we have that,
+    \[\alpha(B) = \alpha(B_i) + \alpha(B - B_i) \leq \alpha(B_i)\]
+    This inequality holds for all $B_i$ and since $\alpha(B_i) \searrow c$, we have that $\alpha(B) \leq c$, thus $\alpha(B) = c$. Set $A = B^c$. To check that $A$ is positive, assume there exists some $A' \subset A$ such that $\alpha(A')< 0$. Then $\alpha(B \cup A') = \alpha(B) + \alpha(A') < c$, which contradicts the defintion of $c$. Therefore $A$ is a positive set.
+
+    To prove uniqueness, let $A \cup B$ and $C \cup D$ be 2 different Hahn decompositions, we want to prove that $A$ and $C$ differ only by a set of measure 0 (which then clearly implies the same for $B$ and $D$). Let $A' = A - (A \cap C)$ and $C' = C - (A \cap C)$. Clearly both $A'$ and $C'$ are positive and we can write $B = (B \cap D) \cup C'$. This implies that $C' \subset B$. Since $B$ is negative and $C'$ is positive, this tells us that $\alpha(C') = 0$, and by symmetry, $\alpha(A') = 0$ as well.
+\end{proof}
+
+
+\begin{theorem}[Jordan Decomposition Theorem]
+    If $\alpha$ is a signed measure, then $\alpha = \mu_1 - \mu_2$ for $\mu_1, \mu_2$ measures with $\mu_2(\om) < \infty$. Moreover, this pair is unique.
+\end{theorem}
+
+\begin{proof}
+    Let $\om = A \cup B$ be a Hahn decomposition, and defined,
+    \[\alpha_+(E) = \alpha(E \cap A) \quad \quad \alpha_-(E) = -\alpha(E \cap B)\]
+    Since $A$ is positive and $B$ is negative, $\alpha_+$ and $\alpha_-$ are both measures. $\alpha_+(A^c) = 0$ and $\alpha_-(A) = 0$ so they are mutually singular.
+
+    To prove uniqueness, suppose that $\alpha = \nu_1 - \nu_2$ and $D$ is a set with $\nu_1(D) = 0$ and $\nu_2(D^c) = 0$. Then if we set $C = D^c$, $C \cup D$ is a Hahn decomposition, since for any $E \subset D,$ $\alpha(E) = \nu_1(E) - \nu_2(E) = \nu_1(E) \geq 0$ (and similarly we can show that $D^c$ is negative) and it follows that $\nu_1(E) = \alpha(E \cap C)$ and $\nu_2(E) = -\alpha(E \cap D)$. By the uniqueness of the Hahn decomposition, it follows that $\mu_1 = \nu_1$ and $\mu_2 = \nu_2$.
+\end{proof}
+
+\begin{theorem}[Lebesgue Decomposition Theorem]
+    Let $\mu, \nu$ be $\sigma$-finite measures. Then $\nu$ can be written as $\nu_r + \nu_s$ where $\nu_s$ is singular with repsect to $\mu$ and,
+    \[\nu_r(E) = \int_E gd\mu\]
+\end{theorem}
+\begin{proof}
+    First, by decomposing $\om$ into $\bigsqcup_i \om_i$ such that $\mu(\om_i), \nu(\om_i) < \infty$ for all $i$, we may assume that $\mu$ and $\nu$ are finite.
+
+    Define $\cG = \{g \geq 0: \int_E g d\mu \leq \nu(E) \text{ for all } E \subset \om\}$. First we want to show that if $g, h \in \cG$, then $\max(g,h) \in \cG$. Let $A = \{g > h\}$ and $B = \{g \leq h\}$. Then,
+    \[\int_E \max(g,h) d\mu = \int_{E \cap A} g d\mu + \int_{E \cap B} h d\mu \leq \nu(E \cap A) + \nu(E \cap B) = \nu(E)\]
+    Let $\kappa = \sup\{\int g d\mu: g \in G\}$. For each $n$, choose $g_n$ such that $\int g_n d\mu > \kappa - 1/n$ and set $h_n = \max(g_1,...,g_n)$. The sequence $h_n$ is monotone. Let $h$ be such that $h_n \nearrow h$. Then by the monotone convergence theorem,
+    \[\kappa \geq \int h d\mu \geq \lim_{n \to \infty} \int g_n d\mu = \kappa\]
+    Set $\nu_r(E) = \int_E h d\mu$ and $\nu_s(E) = \nu(E) - \nu_r(E)$. All that remains to be shown is that $\nu_s$ is singular with respect to $\mu$.
+
+    For all $n$, let $A_n \cup B_n$ be a Hahn decompositon for $\nu_s - \frac{1}{n}\mu$. Since $A_n$ is positive on $\nu_s - \frac{1}{n}\mu$, we know that for all $E$, $\nu_s(E \cap A_n) \geq \frac{1}{n}\mu(E \cap A_n)$, therefore,
+    \[\int_E h + \frac{1}{n}1_{A_n}d\mu = \nu_r(E) + \frac{1}{n}\mu(E \cap A_n) \leq \nu(E)\]
+    which implies that $h + \frac{1}{n}1_{A_n} \in \cG$. Since $h$ is such that $\int h d\mu = \kappa$, we have that $\int 1_{A_n} d\mu = \mu(A_n) = 0$, otherwise $\int h + \frac{1}{n}1_{A_n}d\mu > \kappa$, thus contradicting the definition of $\kappa$. Set $A = \bigcup_n A_n$. All that remains to show is that $\nu_s(A^c) = 0$. If $\nu_s(A^c) > 0$, then this implies that $(\nu_s - \frac{1}{n}\mu)(A_n) > 0$ for large $n$, however this is a contradiction since $A^c \subset A_n$ which is a negative set with respect to $\nu_s - \frac{1}{n}\mu$. 
+\end{proof}
+
+\begin{proof}[Proof of the Radon-Nikodym Theorem]
+    Let $\nu = \nu_r + \nu_s$ be a Lebesgue decomposition, and let $A$ be chosen such that $\nu_s(A^c) = 0$ and $\mu(A) = 0$. Since $\nu << \mu$, $0 = \nu(A) \geq \nu_s(A)$, which then implies that $\nu_s = 0$, so $\nu(E) = \nu_r(E) = \int_E f d\mu$ for some $f \geq 0$.
+
+    Next we prove uniqueness up to a $\mu$-measure 0 set. Suppose that $\int_E g d\mu = \int_E h d\mu$. Then if we let $E_n = \{g > h, g \leq n\}$, we conclude that $E_n$ must have measure $0$. Since the choice of $n$ is arbitrary, $\mu(\{g > h\}) = 0$ and similarly we can show that $\mu(\{g < h\}) = 0$.
+\end{proof}
+
+Now we are able to give a proof of the existence of conditional expectations.
+
+\begin{prop}
+    Let $X$ be a random variable on $(\om, \cF, \prob)$ and let $\cF' \subset \cF$ be a sub $\sigma$-algebra. Then there exists a random variable $W$ such that $W$ is $\cF'$-measurable, and for all $A \in \cF'$,
+    \[\int_A Wd\prob = \int_A X d\prob\]
+\end{prop}
+\begin{proof}
+    First suppose that $X \geq 0$ and for $A \in \cF'$ define, 
+    \[\prob'(A) = \int_A X d \prob\]
+    $\prob'$ is a measure on $(\om, \cF')$ (one can check the countably additive condition using the dominated convergence theorem, other conditions are trivial), and clearly we have $\prob' << \prob$ (here we are considering the restriction of $\prob$ to $\cF$). Let $W$ be the Radon-Nikodym derivative $\frac{d\prob'}{d\prob}$. Then we have that $W$ is $\cF'$ measurable and,
+    \[\int_A X d\prob = \nu(A) = \int W d\prob\]
+    For the general case, we write $X = X^+ - X^-$ and take $\E[X|\cF'] = \E[X^+|\cF'] - \E[X^-|\cF']$. One can easily check that this satisfies the properties of conditional expectation for $X$.
+\end{proof}
+
+\subsection{Markov Chains}
+
+\subsubsection{Definition and Examples}
 \begin{definition}[Transition Probability]
     Let $(S, \cS)$ be a measurable space. A function $\pi: S \times \cS \to \R$ is said to be a transition probability if,
     \begin{enumerate}
@@ -1448,11 +1613,33 @@ In words, this states that the probability of things that happen after $X_{\tau}
     \[\E_y[\tau_y] \leq \E_y[\tau_x] + \E_x[\tau_y] \leq \frac{2}{p}\E_x[\tau_x] < \infty\]
 \end{proof}
 
-From this point 
 
 \begin{theorem}
-    Let $X_0, X_1,...$ be a irreducible Markov chain 
+    Let $X_0, X_1,...$ be a irreducible Markov chain on a countable state space $S$. Then $\{X_n\}_n$ is transcient if and only if for all $x,y \in S$,
+    \[G(x,y) = \sum_{k = 0}^{\infty}\pi^{k}(x,y) < \infty\]
+    Moreover, $G(x,x) - \frac{1}{1-f(x,x)}$ where $f(x,y) = \prob_x(\tau_y < \infty)$ and $G(x,y) = f(x,y)G(y,y)$ for $x \neq y$.
 \end{theorem}
+\begin{proof}
+    \begin{align*}
+        G(x,x) & = \sum_{k = 1}^{\infty} \pi^k(x,x)\\
+        & = \sum_{k = 0}^{\infty} \prob_x(X_k= x)\\
+        &= \sum_{k = 0}^{\infty} \E_x[1_{X_k = x}]\\
+        & = \E_x[\sum_{k = 0}^{\infty} 1_{X_k = x}] & \text{By monotone convergence theorem}
+    \end{align*}
+    Let $N(x) = \sum_{k = 0}^{\infty} 1_{X_k = x} = \#$ of visits to $x$. If $\{X_n\}_n$ is recurrent, then by the strong Markov property, $\E[N(x)] = \infty$ (i.e. letting $\tau_x^k$ be the time between the $k-1$st and $k$th visit to $x$, by the strong Markov property, all $\tau^k_x$ are finite with probability 1. Clearly this implies that $N(x) = \infty$ with probability 1).
+
+    Next we prove that if our Markov chain is transcient, then $\E[N(x)] = \frac{1}{1 - f(x,x)} < \infty$. We write,
+    \[\E_x[\sum_{k = 0}^{\infty}1_{X_k = x}] = \sum_{j = 0}^{\infty} j\prob_x(j \text{ visits to }x) = \sum_{j = 0}^{\infty}jf(x,x)^{j-1}(1-f(x,x)) = \frac{1}{1 - f(x,x)} \textcolor{red}{Why?}\]
+    Finally, we note that because $f(x,y) = \E_x[N(y)] = \prob_x(\tau_y< \infty) \E_y[N(y)] = f(x,y) G(y,y)$, we have that the off diagonal terms are smaller than the diagonal terms, thus concluding the proof.
+\end{proof}
+
+\begin{example}[SSRW on $\Z^d$]
+    We generalize the simple symmetric random walk on $\Z$ to $\Z^d$ by setting $X_0 = \vec{0}$ and $\xi_i = \pm e_k$ with probability $\frac{1}{2^d}$.
+
+    First we check the state type for $d = 1$.
+
+    \textcolor{red}{FINISH}
+\end{example}
 
 \subsubsection{Invariant Measures}
 
@@ -1472,28 +1659,157 @@ From this point
 
 For the remainder of this section we will consider only Markov chains on countable state spaces. 
 
+\textcolor{red}{FINISH}
+
 \subsection{Martingales}
-\subsubsection{Radon-Nikodym Theorem}
 
 
-\begin{definition}[Absolute Continuity]
-\textcolor{red}{Definition}
+\subsubsection{Martingales Definitions and Examples}
+
+\begin{definition}[Martingale]
+    Let $X_1,X_2,...$ be a (finite or infinite) sequence of random variables on $(\om, \cF, \prob)$ with $\E[|X_i|]< \infty$ for all $i$. Let $\cF_1 \subset \cF_2 \subset...$ be a filtration of $\cF$. The sequence $(X_i)_i$ is a martingale with respect to $(\cF_i)_i$ if for each $i$, $\E[X_{i+1}|\cF_i] = X_i$. 
+\end{definition}
+\begin{remark}
+    Typically we will take our filtration to be $\cF_i = \sigma(X_1,...,X_i)$ (the "natural filtration" of $(X_i)_i$). When this is the case, the filtration itself will not be specified.
+\end{remark}
+
+\begin{definition}[Super/Sub-Martingale]
+    A sequence $(X_i)_i$ is a super-martingale if $\E[X_{i + 1}|\cF_i] \leq X_i$ and a sub-martingale if $\E[X_{i+1}|\cF_i] \geq X_i$ 
 \end{definition}
 
+\begin{example}[Linear Martingale]
+    Let $Y_1, Y_2, ...$ be i.i.d. centered random variables. Then $X_i = c + \sum_{k = 1}^i Y_k$ is a martingale with respect to $\cF_m = \sigma(Y_1,...,Y_m)$. In particular, the simple symmetric random walk on $\Z$ is a Martingale. If $\E[Y_i] < 0$, it is a super-martingale and if $\E[Y_i]>0$ it is a sub-martingale.
+\end{example}
 
+\begin{example}[Quadratic Martingale]
+    If $X_n$ is a linear martingale as described above and let $\sigma^2 = Var(Y_i) < \infty$. Then $X_n^2 - n\sigma^2$ is a martingale with respect to $\cF_m = \sigma(Y_1,...,Y_m)$. To verify this, we expand out the conditional expectation,
+    \[\E[X_{n+1}^2 - (n+1)\sigma^2|\cF_n] = \E[(X_n + Y_{n+1})^2 - n\sigma^2 - \sigma^2|\cF_n]\]
+    \[= X_n^2 - n\sigma^2 + X_n\E[Y_{n+1}] + \E[Y_{n+1}^2] - \sigma^2 = X_n^2 - n\sigma^2\]
+\end{example}
 
-\begin{definition}[Radon-Nikodym Derivative]
-\end{definition}
+\begin{example}[Exponential Martingale]
+    Let $Y_1, Y_2, ...$ be nonnegative i.i.d. random variables with $\E[Y_i] = 1$. If $\cF_m = \sigma(Y_1,...,Y_m)$, then $M_n = \prod_{k = 1}^n Y_k$ is a martingale. To verify this,
+    \[\E[M_{n+1}|\cF_n] = M_n \E[Y_{n+1}|\cF_n] = M_n \E[Y_{n+1}] = M_n\]
+    Now if we let $Y_i = e^{\theta \xi_i}$ and $\vp(\theta) = \E[e^{\theta \xi_i}] < \infty$, then $Y_1 = e^{\theta \xi_1}/\vp(\theta)$ has mean 1, therefore,
+    \[M_n = \frac{e^{\theta \sum_{k = 1}^n \xi_k}}{\vp(\theta)^n}\]
+    is a martingale.
+\end{example}
 
+\begin{example}[Polya's Urn]
+    \textcolor{red}{Need example}
+\end{example}
 
-\begin{theorem}[Radon-Nikodym Theorem]
-    
+\subsubsection{Properties of Martingales}
+
+\begin{prop}
+    If $X_n$ is a sub(super)-martingale and $n > m$, then$\E[X_n |\cF_m] \leq (\geq) X_m$. It follows that if $X_n$ is a strict martingale, $\E[X_n|\cF_m] = X_m$.
+\end{prop}
+\begin{proof}
+    The proof is a simple induction.
+\end{proof}
+
+\begin{prop}
+    Let $(X_i, \cF_i)_i$ be a martingale, and let $\vp$ be a real valued convex (concave) function and $\vp(X_i) \in L^1$ for all $i$. Then $(\vp(X_i),\cF_i)_i$ is a sub(super)-martingale.
+\end{prop}
+\begin{proof}
+    The proof is a direct application of the conditional Jensen's inequality. We prove this for convex $\vp$ as the concave case follows by negation. By conditional Jensen's inequality we can write,
+    \[\E[\vp(X_{n+1})|\cF_n] \geq \vp(\E[X_{n+1}|\cF_n]) = \vp(X_n)\]
+\end{proof}
+
+\begin{remark}
+    As the previous 2 propositions illustrate, results for sub-martingales will have a dual result for super-martingales that can be inferred by the property that $(X_n)_n$ a super-martingale implies that $(-X_n)_n$ is a sub-martingale. From this point on we will only state the sub-martingale statements of theorems, however the corresponding super-martingale result should be implied. 
+\end{remark}
+
+\begin{theorem}[Doeb's Inequality]
+    Suppose $X_1,..,X_n$ is a finite martingale. Then $$\prob(\sup_{1 \leq j \leq n} |X_j| \geq l) \leq \frac{1}{l}\E[|X_n|1_{\sup|X_j| \geq l}] \leq \frac{1}{l}\E[|X_n|]$$
 \end{theorem}
+\begin{remark}
+    Note that this is a generalization of Kolmogorov's maximal inequality, since, as we have shown above, $S_n = \sum_{i = 1}^n Y_i$ is a martingale.
+\end{remark}
+\begin{proof}
+    \textcolor{red}{NEED PROOF}
+\end{proof}
+
+\begin{theorem}
+    If $N$ is a stopping time and $X_n$ is a super-martingale, then $X_{n \wedge N}$ is a super-martingale (where $n \wedge N = \min(n,N)$).
+\end{theorem}
+
+\subsubsection{Martingale Convergence Theorems}
+
+\begin{example}
+    Given a random variable $X \in L^1(\om, \cF, \prob)$ and a filtration $\cF_1 \subset \cF_2 \subset ... \cF$ we can construct a Martingale by defining $X_n = \E[X|\cF_n]$.
+\end{example}
+
+Given this example, we may now ask if all Martingales can be defined this way. In the finite case the answer is clearly yes, since $X_1,...,X_n$ a finite martingale implies $X_i = \E[X_n|\cF_i]$. In the infinite case, the answer is more subtle. This section of the notes will be devoted to answering the following 2 questions:
+\begin{enumerate}
+    \item If $(X_n)_n$ is realized as $\E[X|\cF_n]$ for some $X$, does it necessarily follow that $X_n \to X$ in some sense?
+    \item What do we need to know about $(X_n)_n$ to guarantee that there exists an $X$ such that $\E[X|\cF_n] = X_n$.
+\end{enumerate}
+
+\begin{theorem}
+    If there exists an $X \in L^p(\om, \cF, \prob)$ such that $X_n = \E[X|\cF_n]$, then $\lim_{n \to \infty} ||X - X_n||_p = 0$ and $X_n \to X$ almost surely.
+\end{theorem}
+
+\begin{proof}
+    \textcolor{red}{Varadhan 5.5 (which I don't have and kinda sucks anyway)}
+\end{proof}
+
+\begin{theorem}
+    If for some $p> 1$ we have $\sup_n ||X_n||_p < \infty$, then there exists an $X \in L^p(\om, \cF, \prob)$  such that $X_n = \E[X|\cF_n]$.
+\end{theorem}
+\begin{proof}
+    \textcolor{red}{Varadhan 5.6}
+\end{proof}
+
+Next we address the $L^1$ case.
+
+\begin{definition}[Uniform Integrability]
+    A sequence $X_1, X_2,...$ of random variables is uniformly integrable if,
+    \[\lim_{k \to \infty} \sup_n \E[|X_n|1_{|X_n| \geq k}] \to 0\]
+\end{definition}
+Intuitively speaking, uniform integrability is a condition which requires that a small amount of mass does not escape to infinity, causing issues with convergence in expectation, as illustrated by the following non-example, 
+
+\begin{example}
+    The sequence $X_n = n$ with probability $1/n$ and 0 else is not uniformly integrable. Note that even though this sequence converges almost surely to 0, it does not converge to 0 in $L^1$.
+\end{example}
+
+\begin{theorem}
+    If $(X_n)$ is uniformly integrable, then there exists an $X \in L^1(\om, \cF, \prob)$ such that $X_n = \E[X|\cF_n]$.
+\end{theorem}
+\begin{proof}
+    \textcolor{red}{Need to prove, also need to check the statement for the additional condition of converging in L1}
+\end{proof}
+
+\subsubsection{Optional Stopping Theorem}
+
+\textcolor{red}{FINISH SECTION}
 
 
 \subsection{Point Processes}
 \subsubsection{Poisson Point Processes}
+\textcolor{red}{NEED SECTION}
+
 \subsubsection{Determinental Point Processes}
+Let $E$ be a one-particle space \textcolor{red}{what does this mean}. Generally speaking $E$ can be a seperable Hausdorff space, however we will only consider,
+\[E = \prod_{j = 1}^m E_j \text{ where } E_j n \cong \R^d \text{ or } \Z^d\]
+\textcolor{red}{why write it in this specific decomposed format?}
+For the remainder of this section we will assume, unless otherwise stated, that $E = \R^d$, as generalizations to the above cases are easy. Let $X$ be the space of all finite or countable configurations of points in $E$. That is, for $\xi \in X$, we can write $\xi = (x_i)_{i \in \Z_+}$, or when $d = 1, \Z$ to allow for a natural ordering $x_i \leq x_{i + 1}$. When $d > 1$, we assume $\xi$ is ordered according to $||x_{i}||_2 < ||x_{i + 1}||_2$ \textcolor{red}{why strict inequality? Does this ever cause any issues?}. Furthermore, we assume that all $\xi \in X$ are locally finite. That is, for any $K \subset E$ compact, $|\xi \cap K| < \infty$.
+
+We now want to construct a $\sigma$-algebra on our set $X$. Let $B \subset E$ be any bounded Borel set and $n \geq 0$. We define the cylindrical set $C^B_n = \{\xi \in X: |\xi \cap B| = n\}$. We then consider the $\sigma$-algebra generated by these sets, $\cC = \sigma(\{C^B_n\}_{n \in \Z_+, B \in \cB})$.
+
+\begin{definition}[Random Point Field]
+    A random point field is a triplet $(X, \cC, \prob)$ where $X$ and $\cC$ are as above and $\prob$ is a probability measure on $(X, \cC)$.
+\end{definition}
+
+\textcolor{red}{Include discussion of constructing these probability measures given that this is a very uncountable space?}
+
+\begin{definition}[$k$-Point Correlation Function]
+    A locally integrable function 
+\end{definition}
+
+
+
+\subsection{Brownian Motion}
 \subsection{Large Deviation Principles}
 
 \subsection{Stein's Method}
